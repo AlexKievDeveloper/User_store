@@ -6,6 +6,7 @@ import java.util.Map;
 
 
 public interface UserDao {
+    void save(Map<String, Object> transactionsList);
 
     List<Map<String, Object>> getAll();
 }

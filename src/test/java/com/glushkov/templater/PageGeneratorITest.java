@@ -20,7 +20,7 @@ class PageGeneratorITest {
                 "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" +
                 "<head>\n" +
                 "    <meta charset=\"UTF-8\"/>\n" +
-                "    <title>Web 1</title>\n" +
+                "    <title>Table users</title>\n" +
                 "</head>\n" +
                 "<body>\n" +
                 "<table border=\"1\">\n" +

@@ -2,6 +2,8 @@ package com.glushkov.dao;
 
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +13,9 @@ public class JdbcUserDao implements UserDao {
 
     private static final String GET_ALL = "SELECT id, \"firstName\", \"secondName\", salary, \"dateOfBirth\"\n" +
             "FROM public.users;";
+
+    private static final String SAVE_TRANSACTION_TO_DB = "INSERT INTO public.users(id, \"firstName\", \"secondName\", salary, \"dateOfBirth\")\n" +
+            "VALUES (?, ?, ?, ?, ?);";
 
     private DefaultDataSource dataSource;
 
@@ -41,6 +46,27 @@ public class JdbcUserDao implements UserDao {
 
         } catch (SQLException e) {
             throw new RuntimeException("Can't show all transactions. ", e);
+        }
+    }
+
+    public void save(Map<String, Object> userMap) {
+        try (Connection connection = dataSource.getConnection();) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(SAVE_TRANSACTION_TO_DB);
+            preparedStatement.setInt(1, Integer.parseInt(userMap.get("id").toString()));
+            preparedStatement.setString(2, userMap.get("firstName").toString());
+            preparedStatement.setString(3, userMap.get("secondName").toString());
+            preparedStatement.setDouble(4, Double.parseDouble(userMap.get("salary").toString()));
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
+            LocalDate createDate = LocalDate.parse(userMap.get("dateOfBirth").toString(), formatter);
+            Date date = Date.valueOf(createDate);
+            preparedStatement.setDate(5, date);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Can't add transaction to DB ", e);
         }
     }
 
