@@ -14,5 +14,8 @@ public class RemoveUserServlet extends HttpServlet {
 
         JdbcUserDao jdbcUserDao = new JdbcUserDao(new DefaultDataSource());
         jdbcUserDao.remove(userId);
+
+        AllUsersServlet allUsersServlet = new AllUsersServlet();
+        allUsersServlet.doGet(request, response);
     }
 }

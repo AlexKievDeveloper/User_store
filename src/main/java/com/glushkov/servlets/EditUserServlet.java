@@ -47,5 +47,8 @@ public class EditUserServlet extends HttpServlet {
 
         JdbcUserDao jdbcUserDao = new JdbcUserDao(new DefaultDataSource());
         jdbcUserDao.update(userMap, idToUpdate);
+
+        AllUsersServlet allUsersServlet = new AllUsersServlet();
+        allUsersServlet.doGet(request, response);
     }
 }

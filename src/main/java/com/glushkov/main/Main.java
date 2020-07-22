@@ -1,9 +1,6 @@
 package com.glushkov.main;
 
-import com.glushkov.servlets.AddUserServlet;
-import com.glushkov.servlets.AllUsersServlet;
-import com.glushkov.servlets.EditUserServlet;
-import com.glushkov.servlets.RemoveUserServlet;
+import com.glushkov.servlets.*;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -15,6 +12,7 @@ public class Main {
         AddUserServlet addUserServlet = new AddUserServlet();
         EditUserServlet editUserServlet = new EditUserServlet();
         RemoveUserServlet removeUserServlet = new RemoveUserServlet();
+        AllOtherRequestServlet allOtherRequestServlet = new AllOtherRequestServlet();
 
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
@@ -22,6 +20,7 @@ public class Main {
         servletContextHandler.addServlet(new ServletHolder(addUserServlet), "/users/add");
         servletContextHandler.addServlet(new ServletHolder(editUserServlet), "/users/edit");
         servletContextHandler.addServlet(new ServletHolder(removeUserServlet), "/users/remove");
+        servletContextHandler.addServlet(new ServletHolder(allOtherRequestServlet), "/*");
 
         Server server = new Server(8080);
         server.setHandler(servletContextHandler);

@@ -40,6 +40,7 @@ public class AddUserServlet extends HttpServlet {
         JdbcUserDao jdbcUserDao = new JdbcUserDao(new DefaultDataSource());
         jdbcUserDao.save(userMap);
 
-        this.doGet(request, response);
+        AllUsersServlet allUsersServlet = new AllUsersServlet();
+        allUsersServlet.doGet(request, response);
     }
 }

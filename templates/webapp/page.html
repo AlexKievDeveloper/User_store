@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
+    <link rel="shortcut icon" href="favicon.ico">
     <title>Table users</title>
     <style>
         .block {
@@ -35,6 +36,10 @@
         }
         .img {
             color: yellow;
+            margin-left: 40px;
+        }
+        .add {
+            margin-left: 105px;
         }
 
     </style>
@@ -49,6 +54,15 @@
             <td>Second name</td>
             <td>Salary</td>
             <td>Date of birth</td>
+            <td>
+                <form action="/users/add" method="GET">
+                    <button class="form__btn">
+                        <div class="add">
+                            <img src="add.jpg" alt="Add" style="vertical-align:middle">
+                        </div>
+                    </button>
+                </form>
+            </td>
         </tr>
         <#list users as user>
         <tr class="tableBody">
@@ -63,9 +77,8 @@
                         <form action="/users/edit" method="GET">
                             <button class="form__btn">
                                 <div class="img">
-                                    <input type="radio" name="id" value=${user.id}>
-                                    Edit
-                                    <!--<img src="edit.jpg" alt="" style="vertical-align:middle">-->
+                                    <input type="hidden" name="id" value=${user.id}>
+                                    <img src="edit.jpg" alt="Edit" style="vertical-align:middle">
                                 </div>
                             </button>
                         </form>
@@ -74,9 +87,8 @@
                         <form action="/users/remove" method="POST">
                             <button class="form__btn">
                                 <div class="img">
-                                    <input type="radio" name="id" value=${user.id}>
-                                    Remove
-                                    <!--<img src="remove.jpg" alt="" style="vertical-align:middle">-->
+                                    <input type="hidden" name="id" value=${user.id}>
+                                    <img src="remove.jpg" alt="Remove" style="vertical-align:middle">
                                 </div>
                             </button>
                         </form>
