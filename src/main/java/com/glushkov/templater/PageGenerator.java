@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.List;
 import java.util.Map;
 
 
@@ -24,15 +23,11 @@ public class PageGenerator {
         return pageGenerator;
     }
 
-    public String getPage(String filename, List<Map<String, Object>> data) {
+    public String getPage(String filename, Map<String, Object> input) {
         Writer stream = new StringWriter();
         try {
             Template template = cfg.getTemplate(HTML_DIR + File.separator + filename);
-
-            for (Map<String, Object> user : data) {
-                template.process(user, stream);
-            }
-
+            template.process(input, stream);
         } catch (IOException | TemplateException e) {
             throw new RuntimeException(e);
         }

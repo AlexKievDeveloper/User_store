@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Add user</title>
+    <title>Edit user</title>
     <style type="text/css">
         body {
             font-family: 'PT Sans', sans-serif;
@@ -32,7 +32,7 @@
             text-align: center;
         }
 
-        .registration-form{
+        .edit-form{
             text-align: center;
             font-size: 20px;
             margin-top: 20px;
@@ -81,30 +81,31 @@
 </head>
 <body>
 <div class="header">
-    <h1> Add user</h1>
+    <h1> Edit user</h1>
 </div>
 <div>
-    <div class="registration-form">
-        <form action="/users/add" method="POST">
+    <div class="edit-form">
+        <form action="/users/edit" method="POST" name="oldId">
             <label for="id"> Id
-                <input type="text" name = "id" id="id" placeholder="Enter your id" class="form__input" required>
+                <input type="text" name = "id" id="id"  placeholder=${id} class="form__input" required>
             </label>
             <label for="name">Name
-                <input type="text" name = "firstName" id="name" placeholder="Enter your name" class="form__input" required>
+                <input type="text" name = "firstName" id="name" placeholder=${firstName} class="form__input" required>
             </label>
             <label for="surname">Surname
-                <input type="text" name = "secondName" id="surname" placeholder="Enter your surname" class="form__input"
+                <input type="text" name = "secondName" id="surname" placeholder=${secondName} class="form__input"
                        required>
             </label>
             <label for="salary"> Salary
-                <input type="text" name = "salary" id="salary" placeholder="Enter your salary" class="form__input" required>
+                <input type="text" name = "salary" id="salary" placeholder=${salary} class="form__input" required>
             </label>
             <label for="date_of_birth"> Date of birth
-                <input type="text" name = "dateOfBirth" id="date_of_birth" placeholder="Enter your date of birth, format example: 1993/08/24" class="form__input"
+                <input type="text" name = "dateOfBirth" id="date_of_birth" placeholder=${dateOfBirth} class="form__input"
                        required>
             </label>
             <div>
-                <input type="submit" value="SUBMIT" class="form__btn">
+                <input type="submit" value="EDIT" class="form__btn">
+                <input name="idToUpdate" value=${id} type="hidden">
             </div>
         </form>
     </div>

@@ -12,10 +12,17 @@ import java.util.Map;
 public class JdbcUserDao implements UserDao {
 
     private static final String GET_ALL = "SELECT id, \"firstName\", \"secondName\", salary, \"dateOfBirth\"\n" +
-            "FROM public.users;";
+            "FROM public.users ORDER BY id;";
 
     private static final String SAVE_TRANSACTION_TO_DB = "INSERT INTO public.users(id, \"firstName\", \"secondName\", salary, \"dateOfBirth\")\n" +
             "VALUES (?, ?, ?, ?, ?);";
+
+    private static String GET_BY_ID = "SELECT id, \"firstName\", \"secondName\", salary, \"dateOfBirth\"\n" +
+            "FROM public.users WHERE id = ?";
+
+    private static String UPDATE_TEST = "UPDATE public.users SET id=?, \"firstName\"=?, \"secondName\"=?, salary=?, \"dateOfBirth\"=? WHERE id = ?;";
+
+    private static String REMOVE = "DELETE FROM public.users WHERE id = ?;";
 
     private DefaultDataSource dataSource;
 
@@ -29,14 +36,6 @@ public class JdbcUserDao implements UserDao {
              ResultSet resultSet = statement.executeQuery(GET_ALL)) {
 
             List<Map<String, Object>> usersList = new ArrayList<>();
-            Map<String, Object> tableHeaders = new HashMap<>();
-            tableHeaders.put("id", "Id");
-            tableHeaders.put("firstName", "First name");
-            tableHeaders.put("secondName", "Second name");
-            tableHeaders.put("salary", "Salary");
-            tableHeaders.put("dateOfBirth", "Date of birth");
-
-            usersList.add(tableHeaders);
 
             while (resultSet.next()) {
                 Map<String, Object> userMap = new UserRowMapper().userRowMapper(resultSet);
@@ -44,8 +43,8 @@ public class JdbcUserDao implements UserDao {
             }
             return usersList;
 
-        } catch (SQLException e) {
-            throw new RuntimeException("Can't show all transactions. ", e);
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Can't show all users. ", sqlException);
         }
     }
 
@@ -65,12 +64,60 @@ public class JdbcUserDao implements UserDao {
 
             preparedStatement.executeUpdate();
 
-        } catch (SQLException e) {
-            throw new RuntimeException("Can't add transaction to DB ", e);
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Can't add user to DB ", sqlException);
         }
     }
 
-    protected static class UserRowMapper {
+    public Map<String, Object> getById(String id) {
+
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID);
+            preparedStatement.setInt(1, Integer.parseInt(id));
+             ResultSet resultSet = preparedStatement.executeQuery();
+             resultSet.next();
+            return new UserRowMapper().userRowMapper(resultSet);
+
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Can't get user from DB.", sqlException);
+        }
+    }
+
+    public void update(Map<String, Object> userMap, int idToUpdate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
+        LocalDate createDate = LocalDate.parse(userMap.get("dateOfBirth").toString(), formatter);
+        Date date = Date.valueOf(createDate);
+
+        try (Connection connection = dataSource.getConnection();) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TEST);
+            preparedStatement.setInt(1, Integer.parseInt(userMap.get("id").toString()));
+            preparedStatement.setString(2, userMap.get("firstName").toString());
+            preparedStatement.setString(3, userMap.get("secondName").toString());
+            preparedStatement.setDouble(4, Double.parseDouble(userMap.get("salary").toString()));
+            preparedStatement.setDate(5, date);
+            preparedStatement.setInt(6, idToUpdate);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Can't add update in DB ", sqlException);
+        }
+    }
+
+    public void remove(int userId){
+        try (Connection connection = dataSource.getConnection();) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(REMOVE);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Can't remove user from DB ", sqlException);
+        }
+    }
+
+    static class UserRowMapper {
         public Map<String, Object> userRowMapper(ResultSet resultSet) {
 
             Map<String, Object> userMap = new HashMap<>();
