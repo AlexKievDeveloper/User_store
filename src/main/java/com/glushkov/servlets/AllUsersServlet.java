@@ -25,7 +25,7 @@ public class AllUsersServlet extends HttpServlet {
 
             PageGenerator pageGenerator = PageGenerator.instance();
 
-            String page = pageGenerator.getPage("page.html", input);
+            String page = pageGenerator.getPage("page.ftl", input);
 
             response.getWriter().println(page);
 

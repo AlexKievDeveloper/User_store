@@ -17,5 +17,7 @@ class DefaultDataSourceITest {
         Connection connection = defaultDataSource.getConnection();
         //then
         assertFalse(connection.isClosed());
+        connection.close();
+        assertTrue(connection.isClosed());
     }
 }

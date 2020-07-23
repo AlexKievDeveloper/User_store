@@ -19,7 +19,7 @@ public class EditUserServlet extends HttpServlet {
 
         try {
             JdbcUserDao jdbcUserDao = new JdbcUserDao(new DefaultDataSource());
-            Map<String, Object> userMap = jdbcUserDao.getById(request.getParameter("id"));
+            Map<String, Object> userMap = jdbcUserDao.getById(Integer.parseInt(request.getParameter("id")));
 
             PageGenerator pageGenerator = PageGenerator.instance();
 

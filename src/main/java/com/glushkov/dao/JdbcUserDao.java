@@ -38,7 +38,7 @@ public class JdbcUserDao implements UserDao {
             List<Map<String, Object>> usersList = new ArrayList<>();
 
             while (resultSet.next()) {
-                Map<String, Object> userMap = new UserRowMapper().userRowMapper(resultSet);
+                Map<String, Object> userMap = userRowMapper(resultSet);
                 usersList.add(userMap);
             }
             return usersList;
@@ -69,14 +69,14 @@ public class JdbcUserDao implements UserDao {
         }
     }
 
-    public Map<String, Object> getById(String id) {
+    public Map<String, Object> getById(int id) {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID);
-            preparedStatement.setInt(1, Integer.parseInt(id));
-             ResultSet resultSet = preparedStatement.executeQuery();
-             resultSet.next();
-            return new UserRowMapper().userRowMapper(resultSet);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return userRowMapper(resultSet);
 
         } catch (SQLException sqlException) {
             throw new RuntimeException("Can't get user from DB.", sqlException);
@@ -105,7 +105,7 @@ public class JdbcUserDao implements UserDao {
         }
     }
 
-    public void remove(int userId){
+    public void remove(int userId) {
         try (Connection connection = dataSource.getConnection();) {
 
             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE);
@@ -117,23 +117,21 @@ public class JdbcUserDao implements UserDao {
         }
     }
 
-    static class UserRowMapper {
-        public Map<String, Object> userRowMapper(ResultSet resultSet) {
+    static Map<String, Object> userRowMapper(ResultSet resultSet) {
 
-            Map<String, Object> userMap = new HashMap<>();
+        Map<String, Object> userMap = new HashMap<>();
 
-            try {
-                userMap.put("id", resultSet.getInt("id"));
-                userMap.put("firstName", resultSet.getString("firstName"));
-                userMap.put("secondName", resultSet.getString("secondName"));
-                userMap.put("salary", resultSet.getDouble("salary"));
-                Timestamp dateOfBirth = resultSet.getTimestamp("dateOfBirth");
-                userMap.put("dateOfBirth", dateOfBirth.toLocalDateTime().toLocalDate());
+        try {
+            userMap.put("id", resultSet.getInt("id"));
+            userMap.put("firstName", resultSet.getString("firstName"));
+            userMap.put("secondName", resultSet.getString("secondName"));
+            userMap.put("salary", resultSet.getDouble("salary"));
+            LocalDate dateOfBirth = resultSet.getDate("dateOfBirth").toLocalDate();
+            userMap.put("dateOfBirth", dateOfBirth);
 
-                return userMap;
-            } catch (SQLException sqlException) {
-                throw new RuntimeException("Can`t get value from result set. ", sqlException);
-            }
+            return userMap;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Can`t get value from result set. ", sqlException);
         }
     }
 }

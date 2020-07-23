@@ -27,7 +27,7 @@ public class AllOtherRequestServlet extends HttpServlet {
     }
 
 
-    private InputStream readContent(String uri) {
+    InputStream readContent(String uri) {
         int occurrence = StringUtils.countMatches(uri, "/");
         String[] uris;
         Path path;

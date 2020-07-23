@@ -1,4 +1,5 @@
-/*package com.glushkov.servlets;
+/*
+package com.glushkov.servlets;
 
 import com.glushkov.dao.JdbcUserDao;
 import org.junit.jupiter.api.Test;

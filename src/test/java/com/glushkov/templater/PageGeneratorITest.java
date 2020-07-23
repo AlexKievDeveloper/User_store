@@ -2,38 +2,23 @@ package com.glushkov.templater;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PageGeneratorITest {
 
     @Test
-    void getPage() {
+    void getPage() throws IOException {
         //prepare
-        String expectedPage =
-                "<!DOCTYPE html>\n" +
-                "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" +
-                "<head>\n" +
-                "    <meta charset=\"UTF-8\"/>\n" +
-                "    <title>Table users</title>\n" +
-                "</head>\n" +
-                "<body>\n" +
-                "<table border=\"1\">\n" +
-                "    <tr>\n" +
-                "        <td width = 50px>1</td>\n" +
-                "        <td width = 150px>Anton</td>\n" +
-                "        <td width = 150px>Kylaev</td>\n" +
-                "        <td width = 150px>2 000,5</td>\n" +
-                "        <td width = 150px>1993-08-13</td>\n" +
-                "    </tr>\n" +
-                "</table>\n" +
-                "</body>\n" +
-                "</html>\n\n";
+        Path path = Paths.get("src/test/java/com/glushkov/templater/PageForTestPageGenerator.html");
+        byte[] bytes = Files.readAllBytes(path);
+        String expectedPage = new String(bytes);
 
         Map<String, Object> user = new HashMap<>();
         user.put("id", 1);
@@ -44,10 +29,12 @@ class PageGeneratorITest {
 
         List<Map<String, Object>> users = new ArrayList<>();
         users.add(user);
+        Map<String, Object> input = new HashMap<>();
+        input.put("users", users);
 
-/*        //when
-        String actualPage = PageGenerator.instance().getPage("page.html", users);
+        //when
+        String actualPage = PageGenerator.instance().getPage("page.ftl", input);
         //then
-        assertEquals(expectedPage, actualPage);*/
+        assertEquals(expectedPage, actualPage);
     }
 }
