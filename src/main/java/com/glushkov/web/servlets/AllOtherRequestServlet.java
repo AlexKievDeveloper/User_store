@@ -1,6 +1,5 @@
-package com.glushkov.servlets;
+package com.glushkov.web.servlets;
 
-import org.apache.maven.shared.utils.StringUtils;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,16 +27,10 @@ public class AllOtherRequestServlet extends HttpServlet {
 
 
     InputStream readContent(String uri) {
-        int occurrence = StringUtils.countMatches(uri, "/");
-        String[] uris;
-        Path path;
 
-        if (occurrence > 1) {
-            uris = uri.split("/");
-            path = Path.of("templates/webapp", uris[uris.length - 1]);
-        } else {
-            path = Path.of("templates/webapp", uri);
-        }
+        String refactorUri = uri.contains("/users") ? uri.replaceAll("/users", "") : uri;
+
+        Path path = Path.of("templates/webapp", refactorUri);
 
         File file = path.toFile();
 
@@ -51,3 +44,4 @@ public class AllOtherRequestServlet extends HttpServlet {
         }
     }
 }
+

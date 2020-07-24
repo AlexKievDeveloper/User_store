@@ -1,8 +1,8 @@
-package com.glushkov.servlets;
+package com.glushkov.web.servlets;
 
-import com.glushkov.dao.DefaultDataSource;
-import com.glushkov.dao.JdbcUserDao;
-import com.glushkov.templater.PageGenerator;
+import com.glushkov.entity.User;
+import com.glushkov.service.UserService;
+import com.glushkov.web.templater.PageGenerator;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +14,16 @@ import java.util.Map;
 
 public class AllUsersServlet extends HttpServlet {
 
+    private UserService userService;
+
+    public AllUsersServlet(UserService userService) {
+        this.userService = userService;
+    }
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         try {
-            JdbcUserDao jdbcUserDao = new JdbcUserDao(new DefaultDataSource());
-            List<Map<String, Object>> users = jdbcUserDao.getAll();
+            List<User> users = userService.getAll();
 
             Map<String, Object> input = new HashMap<>();
             input.put("users", users);

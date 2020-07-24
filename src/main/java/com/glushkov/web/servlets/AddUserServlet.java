@@ -1,7 +1,8 @@
-package com.glushkov.servlets;
+package com.glushkov.web.servlets;
 
-import com.glushkov.dao.DefaultDataSource;
-import com.glushkov.dao.JdbcUserDao;
+
+import com.glushkov.entity.User;
+import com.glushkov.service.UserService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,11 +12,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class AddUserServlet extends HttpServlet {
+
+    private UserService userService;
+
+    public AddUserServlet(UserService userService) {
+        this.userService = userService;
+    }
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
             String page = new String(Files.readAllBytes(Paths.get("templates/webapp/form.html")));
@@ -29,18 +35,17 @@ public class AddUserServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        Map<String, Object> userMap = new HashMap<>();
-        userMap.put("id", request.getParameter("id"));
-        userMap.put("firstName", request.getParameter("firstName"));
-        userMap.put("secondName", request.getParameter("secondName"));
-        userMap.put("salary", request.getParameter("salary"));
+        User user = new User();
+        user.setId(Integer.parseInt(request.getParameter("id")));
+        user.setFirstName(request.getParameter("firstName"));
+        user.setSecondName(request.getParameter("secondName"));
+        user.setSalary(Double.parseDouble(request.getParameter("salary")));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/d");
-        userMap.put("dateOfBirth", LocalDate.parse(request.getParameter("dateOfBirth"), formatter));
+        user.setDateOfBirth(LocalDate.parse(request.getParameter("dateOfBirth"), formatter));
 
-        JdbcUserDao jdbcUserDao = new JdbcUserDao(new DefaultDataSource());
-        jdbcUserDao.save(userMap);
+        userService.save(user);
 
-        AllUsersServlet allUsersServlet = new AllUsersServlet();
+        AllUsersServlet allUsersServlet = new AllUsersServlet(userService);
         allUsersServlet.doGet(request, response);
     }
 }

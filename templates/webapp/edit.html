@@ -5,106 +5,38 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
     <title>Edit user</title>
-    <style type="text/css">
-        body {
-            font-family: 'PT Sans', sans-serif;
-            background-color: black;
-            color: black;
-        }
 
-        h1, h2, h3, h4, h5 {
-            font-weight: 700;
-            color: #FFFF00;
-        }
-
-        input, label {
-            display: block;
-            color: #FFFF00;
-        }
-
-        ::placeholder {
-            color: black;
-            opacity: 1;
-        }
-
-        .header {
-            text-align: center;
-        }
-
-        .edit-form{
-            text-align: center;
-            font-size: 20px;
-            margin-top: 20px;
-        }
-
-        .form__input {
-            text-align: center;
-            margin-left: 600px;
-            background: #FFFF00;
-            font-size: 16px;
-            font-family: 'PT Sans', sans-serif;
-            border-radius: 30px;
-            border-color: aqua;
-            width: 580px;
-            margin-right: 21px;
-            padding: 14px 0 14px 23px;
-            outline: none;
-        }
-
-        .form__btn {
-            text-align: center;
-            margin-left: 850px;
-            font-family: 'PT Sans', sans-serif;
-            background: #FFFF00;
-            color: #000000;
-            text-transform: uppercase;
-            font-size: 16px;
-            font-weight: 700;
-            border-color: aqua;
-            border-radius: 30px;
-            width: 126px;
-            margin-top: 20px;
-            padding: 14px 0;
-            cursor: pointer;
-        }
-
-        input, select, textarea{
-            color: black;
-        }
-
-        textarea:focus, input:focus {
-            color: black;
-        }
-    </style>
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="body">
 <div class="header">
-    <h1> Edit user</h1>
+    <h1 class="h1"> Edit user</h1>
 </div>
 <div>
-    <div class="edit-form">
+    <div class="form">
         <form action="/users/edit" method="POST" name="oldId">
             <label for="id"> Id
-                <input type="text" name = "id" id="id"  placeholder=${id} class="form__input" required>
+                <input type="text" name = "id" id="id"  value="${id}" class="input" required>
             </label>
             <label for="name">Name
-                <input type="text" name = "firstName" id="name" placeholder=${firstName} class="form__input" required>
+                <input type="text" name = "firstName" id="name" value="${firstName}" class="input" required>
             </label>
             <label for="surname">Surname
-                <input type="text" name = "secondName" id="surname" placeholder=${secondName} class="form__input"
+                <input type="text" name = "secondName" id="surname" value="${secondName}" class="input"
                        required>
             </label>
             <label for="salary"> Salary
-                <input type="text" name = "salary" id="salary" placeholder=${salary} class="form__input" required>
+                <input type="text" name = "salary" id="salary" value="${salary}" class="input" required>
             </label>
             <label for="date_of_birth"> Date of birth
-                <input type="text" name = "dateOfBirth" id="date_of_birth" placeholder=${dateOfBirth} class="form__input"
+                <input type="text" name = "dateOfBirth" id="date_of_birth" value="${dateOfBirth}" class="input"
                        required>
             </label>
             <div>
-                <input type="submit" value="EDIT" class="form__btn">
+                <input type="submit" value="EDIT" class="btn">
                 <input name="idToUpdate" value=${id} type="hidden">
             </div>
         </form>
@@ -112,4 +44,3 @@
 </div>
 </body>
 </html>
-

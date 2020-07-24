@@ -1,7 +1,7 @@
-package com.glushkov.servlets;
+package com.glushkov.web.servlets;
 
-import com.glushkov.dao.DefaultDataSource;
-import com.glushkov.dao.JdbcUserDao;
+
+import com.glushkov.service.UserService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,13 +9,19 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public class RemoveUserServlet extends HttpServlet {
+
+    private UserService userService;
+
+    public RemoveUserServlet(UserService userService) {
+        this.userService = userService;
+    }
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         int userId = Integer.parseInt(request.getParameter("id"));
 
-        JdbcUserDao jdbcUserDao = new JdbcUserDao(new DefaultDataSource());
-        jdbcUserDao.remove(userId);
+        userService.remove(userId);
 
-        AllUsersServlet allUsersServlet = new AllUsersServlet();
+        AllUsersServlet allUsersServlet = new AllUsersServlet(userService);
         allUsersServlet.doGet(request, response);
     }
 }

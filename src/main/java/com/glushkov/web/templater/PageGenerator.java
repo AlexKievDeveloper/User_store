@@ -1,4 +1,4 @@
-package com.glushkov.templater;
+package com.glushkov.web.templater;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;

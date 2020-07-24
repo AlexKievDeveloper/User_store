@@ -18,7 +18,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>14</source>
                     <target>14</target>
@@ -59,7 +59,7 @@
             <version>42.2.14</version>
         </dependency>
 
-        <!-- Test-->
+        <!-- Tests-->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>

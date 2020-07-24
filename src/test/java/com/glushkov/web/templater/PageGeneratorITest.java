@@ -1,4 +1,4 @@
-package com.glushkov.templater;
+package com.glushkov.web.templater;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class PageGeneratorITest {
 
     @Test
-    void getPage() throws IOException {
+    void getPageTest() throws IOException {
         //prepare
-        Path path = Paths.get("src/test/java/com/glushkov/templater/PageForTestPageGenerator.html");
+        Path path = Paths.get("src/test/java/com/glushkov/web/templater/PageForTestPageGenerator.html");
         byte[] bytes = Files.readAllBytes(path);
         String expectedPage = new String(bytes);
 

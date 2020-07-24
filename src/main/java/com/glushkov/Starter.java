@@ -1,17 +1,29 @@
-package com.glushkov.main;
+package com.glushkov;
 
-import com.glushkov.servlets.*;
+import com.glushkov.dao.jdbc.JdbcUserDao;
+import com.glushkov.service.UserService;
+import com.glushkov.web.servlets.*;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.postgresql.ds.PGSimpleDataSource;
 
-public class Main {
+public class Starter {
     public static void main(String[] args) throws Exception {
 
-        AllUsersServlet allUsersServlet = new AllUsersServlet();
-        AddUserServlet addUserServlet = new AddUserServlet();
-        EditUserServlet editUserServlet = new EditUserServlet();
-        RemoveUserServlet removeUserServlet = new RemoveUserServlet();
+        PGSimpleDataSource dataSource = new PGSimpleDataSource();
+        dataSource.setURL("jdbc:postgresql://localhost:5432/user_store");
+        dataSource.setUser("postgres");
+        dataSource.setPassword("");
+
+        JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
+
+        UserService userService = new UserService(jdbcUserDao);
+
+        AllUsersServlet allUsersServlet = new AllUsersServlet(userService);
+        AddUserServlet addUserServlet = new AddUserServlet(userService);
+        EditUserServlet editUserServlet = new EditUserServlet(userService);
+        RemoveUserServlet removeUserServlet = new RemoveUserServlet(userService);
         AllOtherRequestServlet allOtherRequestServlet = new AllOtherRequestServlet();
 
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
