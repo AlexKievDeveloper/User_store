@@ -1,9 +1,11 @@
 package com.glushkov.web.servlets;
 
 
-import com.glushkov.entity.User;
-import com.glushkov.service.UserService;
+import com.glushkov.entities.User;
+import com.glushkov.services.UserService;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,13 +26,14 @@ public class AddUserServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String page = new String(Files.readAllBytes(Paths.get("templates/webapp/form.html")));
+            String page = new String(Files.readAllBytes(Paths.get("templates/webapp/form.ftl")));
             response.getWriter().println(page);
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);
+            //TODO 1) ioException / e   2) Выбрасывать ли RunTimeException, 3) задавать ли статус в Response
         } catch (IOException ioException) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            throw new RuntimeException("Error while loading form");
+            throw new RuntimeException("Error while loading form", ioException);
         }
     }
 
@@ -45,7 +48,12 @@ public class AddUserServlet extends HttpServlet {
 
         userService.save(user);
 
-        AllUsersServlet allUsersServlet = new AllUsersServlet(userService);
-        allUsersServlet.doGet(request, response);
+        try {
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("AllUserServlet");
+            requestDispatcher.forward(request, response);
+        }
+        catch (IOException | ServletException e){
+            throw new RuntimeException("Error while request dispatcher process", e);
+        }
     }
 }

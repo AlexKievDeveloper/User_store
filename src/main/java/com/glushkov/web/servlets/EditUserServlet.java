@@ -1,10 +1,12 @@
 package com.glushkov.web.servlets;
 
 
-import com.glushkov.entity.User;
-import com.glushkov.service.UserService;
+import com.glushkov.entities.User;
+import com.glushkov.services.UserService;
 import com.glushkov.web.templater.PageGenerator;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +29,7 @@ public class EditUserServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         try {
-            User user = userService.getById(Integer.parseInt(request.getParameter("id")));
+            User user = userService.findById(Integer.parseInt(request.getParameter("id")));
 
             Map<String, Object> userMap = new HashMap<>();
             userMap.put("id", user.getId());
@@ -39,14 +41,14 @@ public class EditUserServlet extends HttpServlet {
 
             PageGenerator pageGenerator = PageGenerator.instance();
 
-            String page = pageGenerator.getPage("edit.html", userMap);
+            String page = pageGenerator.getPage("edit.ftl", userMap);
 
             response.getWriter().println(page);
 
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (IOException ioException) {
-            throw new RuntimeException("Error while response writing");
+            throw new RuntimeException("Error while response writing", ioException);
         }
     }
 
@@ -62,8 +64,13 @@ public class EditUserServlet extends HttpServlet {
         int idToUpdate = Integer.parseInt(request.getParameter("idToUpdate"));
 
         userService.update(user, idToUpdate);
-
-        AllUsersServlet allUsersServlet = new AllUsersServlet(userService);
-        allUsersServlet.doGet(request, response);
+        //TODO Убрать создание нового сервлета
+        try {
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("AllUserServlet");
+            requestDispatcher.forward(request, response);
+        }
+        catch (IOException | ServletException e){
+            throw new RuntimeException("Error while request dispatcher process", e);
+        }
     }
 }

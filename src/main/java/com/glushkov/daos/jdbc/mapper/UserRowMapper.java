@@ -1,6 +1,6 @@
-package com.glushkov.dao.jdbc.mapper;
+package com.glushkov.daos.jdbc.mapper;
 
-import com.glushkov.entity.User;
+import com.glushkov.entities.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

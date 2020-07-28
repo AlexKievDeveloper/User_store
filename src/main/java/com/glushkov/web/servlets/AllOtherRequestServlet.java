@@ -12,16 +12,16 @@ public class AllOtherRequestServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(response.getOutputStream());
-             InputStream inputStream = readContent(request.getRequestURI());) {
-
-            byte[] buffer = new byte[16384];
+             BufferedInputStream bufferedInputStream = new BufferedInputStream(readContent(request.getRequestURI()));) {
+//TODO переделать буфер
+            byte[] buffer = new byte[1024];
             int count;
-            while ((count = inputStream.read(buffer)) != -1) {
+            while ((count = bufferedInputStream.read(buffer)) != -1) {
                 bufferedOutputStream.write(buffer, 0, count);
             }
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (IOException ioException) {
-            throw new RuntimeException("Error while response was writing");
+            throw new RuntimeException("Error while response was writing", ioException);
         }
     }
 
@@ -40,7 +40,7 @@ public class AllOtherRequestServlet extends HttpServlet {
             }
             throw new RuntimeException("File not found");
         } catch (FileNotFoundException fileNotFoundException) {
-            throw new RuntimeException("File not found");
+            throw new RuntimeException("File not found", fileNotFoundException);
         }
     }
 }

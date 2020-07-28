@@ -16,7 +16,7 @@ class PageGeneratorITest {
     @Test
     void getPageTest() throws IOException {
         //prepare
-        Path path = Paths.get("src/test/java/com/glushkov/web/templater/PageForTestPageGenerator.html");
+        Path path = Paths.get("src/test/resources/PageForTestPageGenerator.html");
         byte[] bytes = Files.readAllBytes(path);
         String expectedPage = new String(bytes);
 

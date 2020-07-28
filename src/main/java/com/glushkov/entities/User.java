@@ -1,4 +1,4 @@
-package com.glushkov.entity;
+package com.glushkov.entities;
 
 import java.time.LocalDate;
 
@@ -64,8 +64,13 @@ public class User {
 
     @Override
     public String toString() {
-        return "[User id:" + id + ", First name: " + firstName + ", Second name: " + secondName + "," +
-                " Salary: " + salary + ", dateOfBirth: " + dateOfBirth + "]";
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", salary=" + salary +
+                ", dateOfBirth=" + dateOfBirth +
+                '}';
     }
 }
 

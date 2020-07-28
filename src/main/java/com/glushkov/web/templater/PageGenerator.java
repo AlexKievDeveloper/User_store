@@ -1,5 +1,6 @@
 package com.glushkov.web.templater;
 
+import freemarker.cache.URLTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -26,6 +27,7 @@ public class PageGenerator {
     public String getPage(String filename, Map<String, Object> input) {
         Writer stream = new StringWriter();
         try {
+            cfg.setDirectoryForTemplateLoading(new File(HTML_DIR));
             Template template = cfg.getTemplate(HTML_DIR + File.separator + filename);
             template.process(input, stream);
         } catch (IOException | TemplateException e) {
@@ -35,6 +37,6 @@ public class PageGenerator {
     }
 
     private PageGenerator() {
-        cfg = new Configuration();
+        cfg = new Configuration(Configuration.VERSION_2_3_29);
     }
 }
