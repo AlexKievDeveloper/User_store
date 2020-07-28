@@ -1,6 +1,6 @@
-package com.glushkov.dao.jdbc.mapper;
+package com.glushkov.daos.jdbc.mapper;
 
-import com.glushkov.entity.User;
+import com.glushkov.entities.User;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Date;

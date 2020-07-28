@@ -1,6 +1,6 @@
-package com.glushkov.dao.jdbc;
+package com.glushkov.daos.jdbc;
 
-import com.glushkov.entity.User;
+import com.glushkov.entities.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.postgresql.ds.PGSimpleDataSource;
@@ -27,7 +27,7 @@ class JdbcUserDaoITest {
     void getAllTest() {
 
         //when
-        List<User> listOfUsersMap = jdbcUserDao.getAll();
+        List<User> listOfUsersMap = jdbcUserDao.findAll();
 
         //then
         assertFalse(listOfUsersMap.isEmpty());
@@ -43,7 +43,7 @@ class JdbcUserDaoITest {
     @Test
     void saveTest() {
         //prepare
-        List<User> listOfUsersMapBefore = jdbcUserDao.getAll();
+        List<User> listOfUsersMapBefore = jdbcUserDao.findAll();
         int expected = listOfUsersMapBefore.size() + 1;
 
         User user = new User();
@@ -57,9 +57,9 @@ class JdbcUserDaoITest {
         //when
         jdbcUserDao.save(user);
 
-        List<User> listOfUsersMapAfter = jdbcUserDao.getAll();
+        List<User> listOfUsersMapAfter = jdbcUserDao.findAll();
         int actual = listOfUsersMapAfter.size();
-        jdbcUserDao.remove(30);
+        jdbcUserDao.delete(30);
         //then
         assertEquals(expected, actual);
     }
@@ -77,8 +77,8 @@ class JdbcUserDaoITest {
         jdbcUserDao.save(user);
 
         //when
-        User userFromDb = jdbcUserDao.getById(30);
-        jdbcUserDao.remove(30);
+        User userFromDb = jdbcUserDao.findById(30);
+        jdbcUserDao.delete(30);
         //then
         assertNotNull(userFromDb);
         assertEquals(30, userFromDb.getId());
@@ -103,8 +103,8 @@ class JdbcUserDaoITest {
 
         //when
         jdbcUserDao.update(user, 30);
-        User userFromDb = jdbcUserDao.getById(30);
-        jdbcUserDao.remove(30);
+        User userFromDb = jdbcUserDao.findById(30);
+        jdbcUserDao.delete(30);
 
         //then
         assertNotNull(userFromDb);
@@ -118,7 +118,7 @@ class JdbcUserDaoITest {
     @Test
     void removeTest() {
         //prepare
-        List<User> listOfUsersBefore = jdbcUserDao.getAll();
+        List<User> listOfUsersBefore = jdbcUserDao.findAll();
         int expected = listOfUsersBefore.size();
 
         User user = new User();
@@ -130,12 +130,12 @@ class JdbcUserDaoITest {
         user.setDateOfBirth(dateOfBirth);
         jdbcUserDao.save(user);
 
-        List<User> listOfUsersTemp = jdbcUserDao.getAll();
+        List<User> listOfUsersTemp = jdbcUserDao.findAll();
         assertEquals(expected + 1, listOfUsersTemp.size());
 
         //when
-        jdbcUserDao.remove(30);
-        List<User> listOfUsersAfter = jdbcUserDao.getAll();
+        jdbcUserDao.delete(30);
+        List<User> listOfUsersAfter = jdbcUserDao.findAll();
         int actual = listOfUsersAfter.size();
 
         //then

@@ -1,7 +1,7 @@
 package com.glushkov.web.servlets;
 
-import com.glushkov.entity.User;
-import com.glushkov.service.UserService;
+import com.glushkov.entities.User;
+import com.glushkov.services.UserService;
 import com.glushkov.web.templater.PageGenerator;
 
 import javax.servlet.http.HttpServlet;
@@ -23,7 +23,7 @@ public class AllUsersServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         try {
-            List<User> users = userService.getAll();
+            List<User> users = userService.findAll();
 
             Map<String, Object> input = new HashMap<>();
             input.put("users", users);
@@ -37,7 +37,7 @@ public class AllUsersServlet extends HttpServlet {
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (IOException ioException) {
-            throw new RuntimeException("Error while response writing");
+            throw new RuntimeException("Error while response writing", ioException);
         }
     }
 }
