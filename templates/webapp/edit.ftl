@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport"
@@ -17,27 +17,24 @@
 </div>
 <div>
     <div class="form">
-        <form action="/users/edit" method="POST" name="oldId">
-            <label for="id"> Id
-                <input type="text" name = "id" id="id"  value="${id}" class="input" required>
-            </label>
+        <form action="/users/edit" method="POST">
             <label for="name">Name
-                <input type="text" name = "firstName" id="name" value="${firstName}" class="input" required>
+                <input type="text" name="firstName" id="name" value="${firstName}" class="input" required>
             </label>
             <label for="surname">Surname
-                <input type="text" name = "secondName" id="surname" value="${secondName}" class="input"
+                <input type="text" name="secondName" id="surname" value="${secondName}" class="input"
                        required>
             </label>
             <label for="salary"> Salary
-                <input type="text" name = "salary" id="salary" value="${salary}" class="input" required>
+                <input type="text" name="salary" id="salary" value="${salary?string.@salary}" class="input" required>
             </label>
             <label for="date_of_birth"> Date of birth
-                <input type="text" name = "dateOfBirth" id="date_of_birth" value="${dateOfBirth}" class="input"
+                <input type="text" name="dateOfBirth" id="date_of_birth" value="${dateOfBirth}" class="input"
                        required>
             </label>
             <div>
                 <input type="submit" value="EDIT" class="btn">
-                <input name="idToUpdate" value=${id} type="hidden">
+                <input name="id" value=${id} type="hidden">
             </div>
         </form>
     </div>

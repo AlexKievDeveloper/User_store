@@ -1,7 +1,7 @@
-package com.glushkov.daos;
+package com.glushkov.dao;
 
 
-import com.glushkov.entities.User;
+import com.glushkov.entity.User;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public interface UserDao {
 
     void save(User user);
 
-    void update(User user, int idToUpdate);
+    void update(User user);
 
     void delete(int userId);
 }

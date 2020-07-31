@@ -1,20 +1,21 @@
 package com.glushkov;
 
-import com.glushkov.daos.jdbc.JdbcUserDao;
-import com.glushkov.services.UserService;
-import com.glushkov.web.servlets.*;
+import com.glushkov.dao.jdbc.JdbcUserDao;
+import com.glushkov.service.UserService;
+import com.glushkov.web.servlet.*;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.postgresql.ds.PGSimpleDataSource;
+import org.h2.jdbcx.JdbcDataSource;
+
 
 public class Starter {
     public static void main(String[] args) throws Exception {
 
-        PGSimpleDataSource dataSource = new PGSimpleDataSource();
-        dataSource.setURL("jdbc:postgresql://localhost:5432/user_store");
-        dataSource.setUser("postgres");
-        dataSource.setPassword("RbtdAlexander18!");
+        JdbcDataSource dataSource = new JdbcDataSource();
+        dataSource.setURL("jdbc:h2:file:/home/alexander/IdeaProjects/UserStore/src/test/resources/db/user_store;MV_STORE=false");
+        dataSource.setUser("h2");
+        dataSource.setPassword("h2");
 
         JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
 

@@ -1,11 +1,12 @@
-package com.glushkov.daos.jdbc.mapper;
+package com.glushkov.dao.jdbc.mapper;
 
-import com.glushkov.entities.User;
+import com.glushkov.entity.User;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -21,7 +22,7 @@ class UserRowMapperTest {
         when(resultSet.getString("firstName")).thenReturn("Alex");
         when(resultSet.getString("secondName")).thenReturn("Developer");
         when(resultSet.getDouble("salary")).thenReturn(3000.0);
-        Date dateOfBirth = new Date(1993, 6, 23);
+        Date dateOfBirth = Date.valueOf(LocalDate.of(1993, 6, 23));
         when(resultSet.getDate("dateOfBirth")).thenReturn(dateOfBirth);
         UserRowMapper userRowMapper = new UserRowMapper();
 

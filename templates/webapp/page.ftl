@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -25,9 +25,7 @@
             <div class="page_add_user_form">
                 <form action="/users/add" method="GET">
                     <button>
-                        <div class="add">
-                            <img src="img/add.jpg" alt="Add" style="vertical-align:middle">
-                        </div>
+                            <img class="add" src="img/add.jpg" alt="Add" style="vertical-align:middle">
                     </button>
                 </form>
             </div>
@@ -40,27 +38,23 @@
             <td>${user.id}</td>
             <td>${user.firstName}</td>
             <td>${user.secondName}</td>
-            <td>${user.salary}</td>
+            <td>${user.salary?string.@salary}</td>
             <td>${user.dateOfBirth}</td>
             <td>
                 <div class="page__block">
                     <div>
                         <form action="/users/edit" method="GET">
                             <button>
-                                <div>
                                     <input type="hidden" name="id" value=${user.id}>
                                     <img src="img/edit.jpg" alt="Edit" style="vertical-align:middle">
-                                </div>
                             </button>
                         </form>
                     </div>
                     <div>
                         <form action="/users/remove" method="POST">
                             <button>
-                                <div>
                                     <input type="hidden" name="id" value=${user.id}>
                                     <img src="img/remove.jpg" alt="Remove" style="vertical-align:middle">
-                                </div>
                             </button>
                         </form>
                     </div>

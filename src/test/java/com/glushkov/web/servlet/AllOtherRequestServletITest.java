@@ -1,4 +1,4 @@
-package com.glushkov.web.servlets;
+package com.glushkov.web.servlet;
 
 
 import org.junit.jupiter.api.Test;

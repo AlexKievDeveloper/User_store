@@ -1,11 +1,11 @@
-package com.glushkov.services;
+package com.glushkov.service;
 
-import com.glushkov.daos.jdbc.JdbcUserDao;
-import com.glushkov.entities.User;
+import com.glushkov.dao.jdbc.JdbcUserDao;
+import com.glushkov.entity.User;
 
 import java.util.List;
 
-public class UserService implements UserServiceInterface {
+public class UserService {
 
     private JdbcUserDao jdbcUserDao;
 
@@ -25,11 +25,11 @@ public class UserService implements UserServiceInterface {
         return jdbcUserDao.findById(id);
     }
 
-    public void update(User user, int idToUpdate) {
-        jdbcUserDao.update(user, idToUpdate);
+    public void update(User user) {
+        jdbcUserDao.update(user);
     }
 
-    public void delete(int userId) {
-        jdbcUserDao.delete(userId);
+    public void delete(int id) {
+        jdbcUserDao.delete(id);
     }
 }

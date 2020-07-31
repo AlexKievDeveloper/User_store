@@ -1,4 +1,4 @@
-package com.glushkov.entities;
+package com.glushkov.entity;
 
 import java.time.LocalDate;
 
@@ -10,17 +10,6 @@ public class User {
     private String secondName;
     private double salary;
     private LocalDate dateOfBirth;
-
-    public User() {
-    }
-
-    public User(int id, String firstName, String secondName, double salary, LocalDate dateOfBirth) {
-        this.id = id;
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.salary = salary;
-        this.dateOfBirth = dateOfBirth;
-    }
 
     public int getId() {
         return id;
