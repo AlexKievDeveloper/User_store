@@ -48,7 +48,7 @@ public class JdbcUserDao implements UserDao {
             }
             return usersList;
         } catch (SQLException e) {
-            logger.error("Error while getting all users from DB");
+            logger.error("Error while getting all users from DB", e);
             throw new RuntimeException(e);
         }
     }
@@ -84,7 +84,7 @@ public class JdbcUserDao implements UserDao {
                 return userRowMapper.userRowMapper(resultSet);
             }
         } catch (SQLException e) {
-            logger.error("Error while getting user from DB");
+            logger.error("Error while getting user from DB", e);
             throw new RuntimeException(e);
         }
     }

@@ -20,7 +20,8 @@ import java.util.Map;
 
 
 public class PageGenerator {
-    private static final String HTML_DIR = "templates/webapp";
+
+    private static final String HTML_DIR = "src/main/resources/templates";
 
     private static PageGenerator pageGenerator;
 
