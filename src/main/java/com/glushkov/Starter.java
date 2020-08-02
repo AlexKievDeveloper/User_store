@@ -16,7 +16,7 @@ public class Starter {
     public static void main(String[] args) throws Exception {
 
         JdbcDataSource dataSource = new JdbcDataSource();
-        dataSource.setURL("jdbc:h2:file:/home/alexander/IdeaProjects/UserStore/src/test/resources/db/user_store;MV_STORE=false");
+        dataSource.setURL("jdbc:h2:file:~/src/test/resources/db.mv.db/user_store;MV_STORE=false");
         dataSource.setUser("h2");
         dataSource.setPassword("h2");
 
