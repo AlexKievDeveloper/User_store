@@ -59,22 +59,18 @@ textarea:focus, input:focus {
 
 .input {
     text-align: center;
-    margin-left: 535px;
     background: #FFFF00;
     font-size: 16px;
     font-family: 'PT Sans', sans-serif;
     border-radius: 30px;
     border-color: aqua;
-    width: 580px;
-    margin-right: 21px;
+    width: 600px;
     padding: 14px 0 14px 23px;
     outline: none;
     display: block;
 }
 
 .btn {
-    text-align: center;
-    margin-left: 0px;
     font-family: 'PT Sans', sans-serif;
     background: #FFFF00;
     color: #000000;

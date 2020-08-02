@@ -1,4 +1,4 @@
-create table USERS
+create table IF NOT EXISTS USERS
 (
     ID          INT auto_increment,
     FIRSTNAME   VARCHAR(30) not null,
@@ -9,5 +9,5 @@ create table USERS
         primary key (ID)
 );
 
-create unique index USERS_ID_UINDEX
+create unique index IF NOT EXISTS USERS_ID_UINDEX
     on USERS (ID);

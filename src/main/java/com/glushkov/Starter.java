@@ -10,6 +10,10 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.h2.jdbcx.JdbcDataSource;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.Statement;
 
 
 public class Starter {
@@ -19,6 +23,13 @@ public class Starter {
         dataSource.setURL("jdbc:h2:file:~/src/test/resources/db.mv.db/user_store;MV_STORE=false");
         dataSource.setUser("h2");
         dataSource.setPassword("h2");
+
+        try (Connection connection = dataSource.getConnection();
+             Statement createTableStatement = connection.createStatement()) {
+
+            String createTableQuery = new String(Files.readAllBytes(Paths.get("src/test/resources/h2_schema_template.sql")));
+            createTableStatement.execute(createTableQuery);
+        }
 
         JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
 
