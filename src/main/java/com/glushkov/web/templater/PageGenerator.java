@@ -7,8 +7,6 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,17 +31,13 @@ public class PageGenerator {
 
     private final Configuration cfg;
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    public String getPage(String filename, Map<String, Object> input) throws IOException, TemplateException {
 
-    public String getPage(String filename, Map<String, Object> input) throws IOException {
         Writer stream = new StringWriter();
-        try {
-            Template template = cfg.getTemplate(filename);
-            template.process(input, stream);
-        } catch (TemplateException e) {
-            logger.error("Error while getting template from: {}", filename);
-            throw new RuntimeException(e);
-        }
+
+        Template template = cfg.getTemplate(filename);
+        template.process(input, stream);
+
         return stream.toString();
     }
 

@@ -18,9 +18,10 @@ textarea:focus, input:focus {
 }
 
 .h1 {
-     font-weight: 700;
-     color: #FFFF00;
- }
+    font-weight:700;
+    color: #FFFF00;
+}
+
 /*Page*/
 .page_body {
     background: yellow;
@@ -51,7 +52,7 @@ textarea:focus, input:focus {
     color: black;
 }
 
-.form{
+.form {
     text-align: center;
     font-size: 20px;
     margin-top: 20px;
@@ -84,3 +85,4 @@ textarea:focus, input:focus {
     padding: 14px 0;
     cursor: pointer;
 }
+

@@ -17,17 +17,17 @@ class UserRowMapperTest {
     @Test
     void userRowMapperTest() throws SQLException {
         //prepare
-        ResultSet resultSet = mock(ResultSet.class);
-        when(resultSet.getInt("id")).thenReturn(1);
-        when(resultSet.getString("firstName")).thenReturn("Alex");
-        when(resultSet.getString("secondName")).thenReturn("Developer");
-        when(resultSet.getDouble("salary")).thenReturn(3000.0);
+        ResultSet mockResultSet = mock(ResultSet.class);
+        when(mockResultSet.getInt("id")).thenReturn(1);
+        when(mockResultSet.getString("firstName")).thenReturn("Alex");
+        when(mockResultSet.getString("secondName")).thenReturn("Developer");
+        when(mockResultSet.getDouble("salary")).thenReturn(3000.0);
         Date dateOfBirth = Date.valueOf(LocalDate.of(1993, 6, 23));
-        when(resultSet.getDate("dateOfBirth")).thenReturn(dateOfBirth);
+        when(mockResultSet.getDate("dateOfBirth")).thenReturn(dateOfBirth);
         UserRowMapper userRowMapper = new UserRowMapper();
 
         //when
-        User actual = userRowMapper.userRowMapper(resultSet);
+        User actual = userRowMapper.userRowMapper(mockResultSet);
 
         //then
         assertNotNull(actual);

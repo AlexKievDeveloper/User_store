@@ -4,8 +4,6 @@ package com.glushkov.dao.jdbc;
 import com.glushkov.dao.UserDao;
 import com.glushkov.dao.jdbc.mapper.UserRowMapper;
 import com.glushkov.entity.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -25,15 +23,13 @@ public class JdbcUserDao implements UserDao {
 
     private static final String DELETE = "DELETE FROM users WHERE id = ?;";
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
     private DataSource dataSource;
 
     public JdbcUserDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public List<User> findAll() {
+    public List<User> findAll() throws SQLException {
 
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement();
@@ -47,13 +43,10 @@ public class JdbcUserDao implements UserDao {
                 usersList.add(user);
             }
             return usersList;
-        } catch (SQLException e) {
-            logger.error("Error while getting all users from DB", e);
-            throw new RuntimeException(e);
         }
     }
 
-    public void save(User user) {
+    public void save(User user) throws SQLException {
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE)) {
@@ -64,12 +57,10 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setDate(4, Date.valueOf(user.getDateOfBirth()));
 
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Can`t save user to DB", e);
         }
     }
 
-    public User findById(int id) {
+    public User findById(int id) throws SQLException {
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID)) {
@@ -83,13 +74,10 @@ public class JdbcUserDao implements UserDao {
 
                 return userRowMapper.userRowMapper(resultSet);
             }
-        } catch (SQLException e) {
-            logger.error("Error while getting user from DB", e);
-            throw new RuntimeException(e);
         }
     }
 
-    public void update(User user) {
+    public void update(User user) throws SQLException {
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
@@ -101,19 +89,15 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setInt(5, user.getId());
 
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Can`t update user in DB", e);
         }
     }
 
-    public void delete(int id) {
+    public void delete(int id) throws SQLException {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE)) {
 
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Can`t delete user in DB", e);
         }
     }
 }

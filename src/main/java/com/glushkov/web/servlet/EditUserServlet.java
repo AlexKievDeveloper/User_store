@@ -5,10 +5,10 @@ import com.glushkov.entity.User;
 import com.glushkov.service.UserService;
 import com.glushkov.web.templater.PageGenerator;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -17,46 +17,53 @@ import java.util.Map;
 
 public class EditUserServlet extends HttpServlet {
 
+    private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");//TODO Конструктор или константа выше?
+
     private UserService userService;
 
     public EditUserServlet(UserService userService) {
         this.userService = userService;
     }
 
-    private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        try {
+            User user = userService.findById(Integer.parseInt(request.getParameter("id")));
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+            Map<String, Object> userMap = new HashMap<>();
+            userMap.put("id", user.getId());
+            userMap.put("firstName", user.getFirstName());
+            userMap.put("secondName", user.getSecondName());
+            userMap.put("salary", user.getSalary());
+            userMap.put("dateOfBirth", user.getDateOfBirth());
 
-        User user = userService.findById(Integer.parseInt(request.getParameter("id")));
+            PageGenerator pageGenerator = PageGenerator.instance();
 
-        Map<String, Object> userMap = new HashMap<>();
-        userMap.put("id", user.getId());
-        userMap.put("firstName", user.getFirstName());
-        userMap.put("secondName", user.getSecondName());
-        userMap.put("salary", user.getSalary());
-        userMap.put("dateOfBirth", user.getDateOfBirth());
+            String page = pageGenerator.getPage("edit.ftl", userMap);
 
-        PageGenerator pageGenerator = PageGenerator.instance();
+            response.setContentType("text/html;charset=utf-8");
 
-        String page = pageGenerator.getPage("edit.ftl", userMap);
+            response.getWriter().println(page);
 
-        response.getWriter().println(page);
-
-        response.setContentType("text/html;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (Exception ex) {
+            throw new ServletException(ex);
+        }
     }
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        try {
+            User user = new User();
+            user.setId(Integer.parseInt(request.getParameter("id")));
+            user.setFirstName(request.getParameter("firstName"));
+            user.setSecondName(request.getParameter("secondName"));
+            user.setSalary(Double.parseDouble(request.getParameter("salary")));
+            user.setDateOfBirth(LocalDate.parse(request.getParameter("dateOfBirth"), DATE_TIME_FORMATTER));
 
-        User user = new User();
-        user.setId(Integer.parseInt(request.getParameter("id")));
-        user.setFirstName(request.getParameter("firstName"));
-        user.setSecondName(request.getParameter("secondName"));
-        user.setSalary(Double.parseDouble(request.getParameter("salary")));
-        user.setDateOfBirth(LocalDate.parse(request.getParameter("dateOfBirth"), DATE_TIME_FORMATTER));
+            userService.update(user);
 
-        userService.update(user);
-
-        response.sendRedirect("/users");
+            response.sendRedirect("/users");
+        } catch (Exception ex) {
+            throw new ServletException(ex);
+        }
     }
 }

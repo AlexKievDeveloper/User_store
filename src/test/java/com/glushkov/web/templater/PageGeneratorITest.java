@@ -1,5 +1,6 @@
 package com.glushkov.web.templater;
 
+import freemarker.template.TemplateException;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PageGeneratorITest {
 
     @Test
-    void getPageTest() throws IOException {
+    void getPageTest() throws IOException, TemplateException {
         //prepare
         Path path = Paths.get("src/test/resources/PageForTestPageGenerator.html");
         byte[] bytes = Files.readAllBytes(path);

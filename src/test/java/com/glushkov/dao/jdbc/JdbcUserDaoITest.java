@@ -6,6 +6,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,27 +17,26 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class JdbcUserDaoITest {
 
-    private static final String DELETE = "DELETE FROM users";
-
-    private static final String RESTART_AUTO_INC = "ALTER TABLE users ALTER COLUMN id RESTART WITH 1";
+    private static final String DROP_TABLE = "DROP TABLE users";
 
     private static JdbcDataSource dataSource = new JdbcDataSource();
 
     private static JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
 
     @BeforeAll
-    static void setUp() throws SQLException {
-        dataSource.setURL("jdbc:h2:file:~/src/test/resources/db.mv.db/user_store;MV_STORE=false");
+    static void setUp() throws SQLException, IOException {
+        dataSource.setURL("jdbc:h2:file:~/src/test/resources/db.mv.db/user_store_test;MV_STORE=false");
         dataSource.setUser("h2");
         dataSource.setPassword("h2");
 
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
 
-            statement.execute(DELETE);
-            statement.execute(RESTART_AUTO_INC);
+            String createTableQuery = new String(Files.readAllBytes(Paths.get("src/test/resources/h2-test-schema.sql")));
+            statement.execute(createTableQuery);
         }
 
         for (int i = 0; i < 5; i++) {
@@ -49,7 +51,7 @@ class JdbcUserDaoITest {
     }
 
     @Test
-    void findAllTest() {
+    void findAllTest() throws SQLException {
 
         //when
         List<User> listOfUsersMap = jdbcUserDao.findAll();
@@ -62,21 +64,21 @@ class JdbcUserDaoITest {
             assertNotEquals(0, userFromDB.getId());
             assertNotNull(userFromDB.getFirstName());
             assertNotNull(userFromDB.getSecondName());
-            assertNotNull(userFromDB.getSecondName());
+            assertNotEquals(0, userFromDB.getSalary());
             assertNotNull(userFromDB.getDateOfBirth());
         }
     }
 
     @Test
-    void saveTest() {
+    void saveTest() throws SQLException {
         //prepare
         List<User> listOfUsersMapBefore = jdbcUserDao.findAll();
         assertEquals(5, listOfUsersMapBefore.size());
 
         User user = new User();
-        user.setFirstName("Kirill");
-        user.setSecondName("Mavrody");
-        user.setSalary(2000.0);
+        user.setFirstName("Alex");
+        user.setSecondName("Developer");
+        user.setSalary(3000.0);
         LocalDate dateOfBirth = LocalDate.of(1993, 6, 23);
         user.setDateOfBirth(dateOfBirth);
 
@@ -97,7 +99,7 @@ class JdbcUserDaoITest {
     }
 
     @Test
-    void findByIdTest() {
+    void findByIdTest() throws SQLException {
         //when
         User userFromDb = jdbcUserDao.findById(1);
 
@@ -111,7 +113,7 @@ class JdbcUserDaoITest {
     }
 
     @Test
-    void updateTest() {
+    void updateTest() throws SQLException {
         //prepare
         User user = new User();
         user.setId(2);
@@ -135,7 +137,9 @@ class JdbcUserDaoITest {
     }
 
     @Test
-    void deleteTest() {
+    void deleteTest() throws SQLException {
+        //prepare
+        assertEquals(5, jdbcUserDao.findAll().size());
         //when
         jdbcUserDao.delete(5);
         List<User> listOfUsersAfter = jdbcUserDao.findAll();
@@ -148,9 +152,7 @@ class JdbcUserDaoITest {
     static void cleanUp() throws SQLException {
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
-
-            statement.execute(DELETE);
-            statement.execute(RESTART_AUTO_INC);
+            statement.execute(DROP_TABLE);
         }
     }
 }

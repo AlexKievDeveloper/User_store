@@ -20,10 +20,10 @@
             </div>
             <div class="form">
                 <form action="/users/edit" method="POST">
-                    <label for="name">Name
+                    <label for="name"> Name
                         <input type="text" name="firstName" id="name" value="${firstName}" class="input" required>
                     </label>
-                    <label for="surname">Surname
+                    <label for="surname"> Surname
                         <input type="text" name="secondName" id="surname" value="${secondName}" class="input"
                                required>
                     </label>
