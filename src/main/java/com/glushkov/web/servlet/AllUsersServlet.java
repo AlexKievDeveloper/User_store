@@ -37,10 +37,8 @@ public class AllUsersServlet extends HttpServlet {
             String page = pageGenerator.getPage("page.ftl", input);
 
             response.setContentType("text/html;charset=utf-8");
-
-            response.getWriter().println(page);
-
             response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().println(page);
         } catch (Exception ex) {
             throw new ServletException(ex);
         }

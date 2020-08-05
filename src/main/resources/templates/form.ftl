@@ -29,12 +29,13 @@
                                class="input" required>
                     </label>
                     <label for="salary"> Salary
-                        <input type="text" name="salary" id="salary"
-                               placeholder="Enter your salary. Use separator: ' . '" class="input" required>
+                        <input type="number" step=".01" min="0" name="salary" id="salary"
+                               value="${salary?string.@salary}" placeholder="Enter your salary" class="input"
+                               required>
                     </label>
                     <label for="date_of_birth"> Date of birth
-                        <input type="text" name="dateOfBirth" id="date_of_birth"
-                               placeholder="Enter your date of birth, format example: 1993-08-24" class="input"
+                        <input type="date" name="dateOfBirth" id="date_of_birth" value="${dateOfBirth}"
+                               placeholder="Enter your date of birth" class="input"
                                required>
                     </label>
                     <div>
@@ -47,4 +48,3 @@
 </div>
 </body>
 </html>
-

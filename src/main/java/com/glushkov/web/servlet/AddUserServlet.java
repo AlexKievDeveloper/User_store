@@ -29,24 +29,16 @@ public class AddUserServlet extends HttpServlet {
             String page = new String(Files.readAllBytes(Paths.get("src/main/resources/templates/form.ftl")));
 
             response.setContentType("text/html;charset=utf-8");
-
-            response.getWriter().println(page);
-
             response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().println(page);
         } catch (Exception ex) {
             throw new ServletException(ex);
         }
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-
-        User user = new User();
-
         try {
-            user.setFirstName(request.getParameter("firstName"));
-            user.setSecondName(request.getParameter("secondName"));
-            user.setSalary(Double.parseDouble(request.getParameter("salary")));
-            user.setDateOfBirth(LocalDate.parse(request.getParameter("dateOfBirth"), DATE_TIME_FORMATTER));
+            User user = getUser(request);
 
             userService.save(user);
 
@@ -54,5 +46,14 @@ public class AddUserServlet extends HttpServlet {
         } catch (Exception ex) {
             throw new ServletException(ex);
         }
+    }
+
+    private User getUser(HttpServletRequest request) {
+        User user = new User();
+        user.setFirstName(request.getParameter("firstName"));
+        user.setSecondName(request.getParameter("secondName"));
+        user.setSalary(Double.parseDouble(request.getParameter("salary")));
+        user.setDateOfBirth(LocalDate.parse(request.getParameter("dateOfBirth"), DATE_TIME_FORMATTER));
+        return user;
     }
 }

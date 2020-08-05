@@ -6,9 +6,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -27,17 +24,10 @@ class JdbcUserDaoITest {
     private static JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
 
     @BeforeAll
-    static void setUp() throws SQLException, IOException {
-        dataSource.setURL("jdbc:h2:file:~/src/test/resources/db.mv.db/user_store_test;MV_STORE=false");
+    static void setUp() throws SQLException {
+        dataSource.setURL("jdbc:h2:~/test/resources/db;INIT=runscript from 'src/test/resources/h2-test-schema.sql';");
         dataSource.setUser("h2");
         dataSource.setPassword("h2");
-
-        try (Connection connection = dataSource.getConnection();
-             Statement statement = connection.createStatement()) {
-
-            String createTableQuery = new String(Files.readAllBytes(Paths.get("src/test/resources/h2-test-schema.sql")));
-            statement.execute(createTableQuery);
-        }
 
         for (int i = 0; i < 5; i++) {
             User user = new User();
@@ -52,7 +42,6 @@ class JdbcUserDaoITest {
 
     @Test
     void findAllTest() throws SQLException {
-
         //when
         List<User> listOfUsersMap = jdbcUserDao.findAll();
 
@@ -143,7 +132,6 @@ class JdbcUserDaoITest {
         //when
         jdbcUserDao.delete(5);
         List<User> listOfUsersAfter = jdbcUserDao.findAll();
-
         //then
         assertEquals(4, listOfUsersAfter.size());
     }

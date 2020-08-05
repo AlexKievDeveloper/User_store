@@ -9,16 +9,14 @@ import org.junit.jupiter.api.Test;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -26,23 +24,16 @@ class RemoveUserServletITest {
     private static final String DROP_TABLE = "DROP TABLE users";
 
     @Test
-    void doPostTest() throws IOException, ServletException, SQLException {
+    void doPostTest() throws ServletException, SQLException {
         //prepare
         JdbcDataSource dataSource = new JdbcDataSource();
-        dataSource.setURL("jdbc:h2:file:~/src/test/resources/db.mv.db/user_store_test;MV_STORE=false");
+        dataSource.setURL("jdbc:h2:~/test/resources/db;INIT=runscript from 'src/test/resources/h2-test-schema.sql';");
         dataSource.setUser("h2");
         dataSource.setPassword("h2");
 
         JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
         UserService UserService = new UserService(jdbcUserDao);
         RemoveUserServlet removeUserServlet = new RemoveUserServlet(UserService);
-
-        try (Connection connection = dataSource.getConnection();
-             Statement statement = connection.createStatement()) {
-
-            String createTableQuery = new String(Files.readAllBytes(Paths.get("src/test/resources/h2-test-schema.sql")));
-            statement.execute(createTableQuery);
-        }
 
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
         HttpServletResponse mockResponse = mock(HttpServletResponse.class);

@@ -23,6 +23,8 @@ public class JdbcUserDao implements UserDao {
 
     private static final String DELETE = "DELETE FROM users WHERE id = ?;";
 
+    private static final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
+
     private DataSource dataSource;
 
     public JdbcUserDao(DataSource dataSource) {
@@ -36,10 +38,9 @@ public class JdbcUserDao implements UserDao {
              ResultSet resultSet = statement.executeQuery(FIND_ALL)) {
 
             List<User> usersList = new ArrayList<>();
-            UserRowMapper userRowMapper = new UserRowMapper();
 
             while (resultSet.next()) {
-                User user = userRowMapper.userRowMapper(resultSet);
+                User user = USER_ROW_MAPPER.userRowMapper(resultSet);
                 usersList.add(user);
             }
             return usersList;
@@ -70,9 +71,7 @@ public class JdbcUserDao implements UserDao {
 
                 resultSet.next();
 
-                UserRowMapper userRowMapper = new UserRowMapper();
-
-                return userRowMapper.userRowMapper(resultSet);
+                return USER_ROW_MAPPER.userRowMapper(resultSet);
             }
         }
     }

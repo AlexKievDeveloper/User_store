@@ -4,33 +4,24 @@ package com.glushkov;
 import com.glushkov.dao.jdbc.JdbcUserDao;
 import com.glushkov.service.UserService;
 import com.glushkov.web.handler.ErrorHandler;
-import com.glushkov.web.servlet.*;
+import com.glushkov.web.servlet.AddUserServlet;
+import com.glushkov.web.servlet.AllUsersServlet;
+import com.glushkov.web.servlet.EditUserServlet;
+import com.glushkov.web.servlet.RemoveUserServlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.h2.jdbcx.JdbcDataSource;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.Statement;
-
 
 public class Starter {
     public static void main(String[] args) throws Exception {
 
         JdbcDataSource dataSource = new JdbcDataSource();
-        dataSource.setURL("jdbc:h2:file:~/src/main/resources/db.mv.db/user_store;MV_STORE=false");
+        dataSource.setURL("jdbc:h2:file:~/src/main/resources/db/user_store.h2.db;INIT=runscript from 'src/main/resources/h2-schema.sql';");
         dataSource.setUser("h2");
         dataSource.setPassword("h2");
-
-        try (Connection connection = dataSource.getConnection();
-             Statement createTableStatement = connection.createStatement()) {
-
-            String createTableQuery = new String(Files.readAllBytes(Paths.get("src/main/resources/h2-schema.sql")));
-            createTableStatement.execute(createTableQuery);
-        }
 
         JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
 
@@ -58,10 +49,13 @@ public class Starter {
     }
 }
 
-//TODO 1) После выключения Компьютера база данных не удаляется
-// 2) Не могу изменить цвет шрифта в error.ftl  (h2)
-// 3) Не получилось сделать Полноценные тесты на сервлеты потому что тестовая библиотека использует классы которые удалены
-// 4) Во время тестирования ErrorHandler выводится стек трейс ошибки которая выбрасывается во время теста
-// 5) Обдумать response.sendError(500, ex.getMessage()); (бросает IOException который будет проброшен) вместо throw new ServletException(ex);
-// 6) Вывод стек трейса кроме моего Логгера ещё: 20:01:34.339[qtp1373419525-26]WARN  org.eclipse.jetty.server.HttpChannel - /users/add
-// javax.servlet.ServletException: java.time.format.DateTimeParseException: Text '2001/06/12' could not be parsed at index 4
+//TODO 1)В папках db постоянное пишет loading. Предполагаю что причина может быть в DBVizualizer но это не точно
+// 2) Не могу изменить цвет шрифта в error.ftl (message: h1->h2 - yellow)
+// 3) Не получилось сделать Полноценные тесты на сервлеты потому что тестовая библиотека использует классы которые удалены,
+// не могу разобраться с protected final ByteArrayOutputStream output = new ByteArrayOutputStream();, System.setOut(new PrintStream(output));
+// System.setOut(null); и получить в работу поток байт в response
+// 4) В форме в поле для даты все плейсхолдера выводиться дд.мм.гггг - язык берётся у браузера нужно вывести на английском
+// 5) Во время тестирования ErrorHandler выводится стек трейс ошибки которая выбрасывается во время теста
+// 6) Вывод стек трейса кроме моего Логгера и ещё: 20:01:34.339[qtp1373419525-26]WARN  org.eclipse.jetty.server.HttpChannel - /users/add
+// javax.servlet.ServletException: java.time.format.DateTimeParseException:
+// 7) Обдумать response.sendError(500, ex.getMessage()); (бросает IOException который будет проброшен) вместо throw new ServletException(ex);

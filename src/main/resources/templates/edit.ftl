@@ -28,11 +28,12 @@
                                required>
                     </label>
                     <label for="salary"> Salary
-                        <input type="text" name="salary" id="salary" value="${salary?string.@salary}" class="input"
+                        <input type="number" step=".01" min="0" name="salary" id="salary"
+                               value="${salary?string.@salary}" class="input"
                                required>
                     </label>
                     <label for="date_of_birth"> Date of birth
-                        <input type="text" name="dateOfBirth" id="date_of_birth" value="${dateOfBirth}" class="input"
+                        <input type="date" name="dateOfBirth" id="date_of_birth" value="${dateOfBirth}" class="input"
                                required>
                     </label>
                     <div>
@@ -46,3 +47,4 @@
 </div>
 </body>
 </html>
+

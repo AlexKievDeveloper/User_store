@@ -13,10 +13,6 @@ import org.junit.jupiter.api.Test;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,7 +20,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 class AddUserServletITest {
@@ -52,23 +49,16 @@ class AddUserServletITest {
     }
 
     @Test
-    void doPostTest() throws IOException, SQLException, ServletException {
+    void doPostTest() throws SQLException, ServletException {
         //prepare
         JdbcDataSource dataSource = new JdbcDataSource();
-        dataSource.setURL("jdbc:h2:file:~/src/test/resources/db.mv.db/user_store_test;MV_STORE=false");
+        dataSource.setURL("jdbc:h2:~/test/resources/db;INIT=runscript from 'src/test/resources/h2-test-schema.sql';");
         dataSource.setUser("h2");
         dataSource.setPassword("h2");
 
         JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
         UserService userService = new UserService(jdbcUserDao);
         AddUserServlet addUserServlet = new AddUserServlet(userService);
-
-        try (Connection connection = dataSource.getConnection();
-             Statement statement = connection.createStatement()) {
-
-            String createTableQuery = new String(Files.readAllBytes(Paths.get("src/test/resources/h2-test-schema.sql")));
-            statement.execute(createTableQuery);
-        }
 
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
         HttpServletResponse mockResponse = mock(HttpServletResponse.class);
@@ -98,42 +88,5 @@ class AddUserServletITest {
              Statement statement = connection.createStatement()) {
             statement.execute(DROP_TABLE);
         }
-    }
-
-    @Test
-    void doPostTestForIllegalArgumentExceptionThrownWhenNumberFormatExceptionIsThrown() {
-        //prepare
-        UserService mockUserService = mock(UserService.class);
-        AddUserServlet addUserServlet = new AddUserServlet(mockUserService);
-        HttpServletRequest mockRequest = mock(HttpServletRequest.class);
-        HttpServletResponse mockResponse = mock(HttpServletResponse.class);
-
-        when(mockRequest.getParameter("firstName")).thenReturn("Alex");
-        when(mockRequest.getParameter("secondName")).thenReturn("Developer");
-        when(mockRequest.getParameter("salary")).thenReturn("1000,10");
-
-        //when, then
-        assertThrows(ServletException.class, () -> {
-            addUserServlet.doPost(mockRequest, mockResponse);
-        });
-    }
-
-    @Test
-    void doPostTestForIllegalArgumentExceptionThrownWhenDatetimeParseExceptionIsThrown() {
-        //prepare
-        UserService mockUserService = mock(UserService.class);
-        AddUserServlet addUserServlet = new AddUserServlet(mockUserService);
-        HttpServletRequest mockRequest = mock(HttpServletRequest.class);
-        HttpServletResponse mockResponse = mock(HttpServletResponse.class);
-
-        when(mockRequest.getParameter("firstName")).thenReturn("Alex");
-        when(mockRequest.getParameter("secondName")).thenReturn("Developer");
-        when(mockRequest.getParameter("salary")).thenReturn("1000.10");
-        when(mockRequest.getParameter("dateOfBirth")).thenReturn("1993/06/23");
-
-        //when, then
-        assertThrows(ServletException.class, () -> {
-            addUserServlet.doPost(mockRequest, mockResponse);
-        });
     }
 }

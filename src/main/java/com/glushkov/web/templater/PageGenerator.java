@@ -31,12 +31,16 @@ public class PageGenerator {
 
     private final Configuration cfg;
 
-    public String getPage(String filename, Map<String, Object> input) throws IOException, TemplateException {
+    public String getPage(String filename, Map<String, Object> input) {
 
         Writer stream = new StringWriter();
 
+        try {
         Template template = cfg.getTemplate(filename);
-        template.process(input, stream);
+            template.process(input, stream);
+        } catch (TemplateException | IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return stream.toString();
     }

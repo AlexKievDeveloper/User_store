@@ -19,7 +19,7 @@ public class EditUserServlet extends HttpServlet {
 
     private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");//TODO Конструктор или константа выше?
 
-    private UserService userService;
+    private UserService userService; //TODO сделать ли userService константой (final)?
 
     public EditUserServlet(UserService userService) {
         this.userService = userService;
@@ -29,22 +29,15 @@ public class EditUserServlet extends HttpServlet {
         try {
             User user = userService.findById(Integer.parseInt(request.getParameter("id")));
 
-            Map<String, Object> userMap = new HashMap<>();
-            userMap.put("id", user.getId());
-            userMap.put("firstName", user.getFirstName());
-            userMap.put("secondName", user.getSecondName());
-            userMap.put("salary", user.getSalary());
-            userMap.put("dateOfBirth", user.getDateOfBirth());
+            Map<String, Object> userMap = getUserMap(user);
 
             PageGenerator pageGenerator = PageGenerator.instance();
 
             String page = pageGenerator.getPage("edit.ftl", userMap);
 
             response.setContentType("text/html;charset=utf-8");
-
-            response.getWriter().println(page);
-
             response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().println(page);
         } catch (Exception ex) {
             throw new ServletException(ex);
         }
@@ -52,12 +45,7 @@ public class EditUserServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
-            User user = new User();
-            user.setId(Integer.parseInt(request.getParameter("id")));
-            user.setFirstName(request.getParameter("firstName"));
-            user.setSecondName(request.getParameter("secondName"));
-            user.setSalary(Double.parseDouble(request.getParameter("salary")));
-            user.setDateOfBirth(LocalDate.parse(request.getParameter("dateOfBirth"), DATE_TIME_FORMATTER));
+            User user = getUser(request);
 
             userService.update(user);
 
@@ -65,5 +53,25 @@ public class EditUserServlet extends HttpServlet {
         } catch (Exception ex) {
             throw new ServletException(ex);
         }
+    }
+
+    private Map<String, Object> getUserMap(User user) {
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("id", user.getId());
+        userMap.put("firstName", user.getFirstName());
+        userMap.put("secondName", user.getSecondName());
+        userMap.put("salary", user.getSalary());
+        userMap.put("dateOfBirth", user.getDateOfBirth());
+        return userMap;
+    }
+
+    private User getUser(HttpServletRequest request) {
+        User user = new User();
+        user.setId(Integer.parseInt(request.getParameter("id")));
+        user.setFirstName(request.getParameter("firstName"));
+        user.setSecondName(request.getParameter("secondName"));
+        user.setSalary(Double.parseDouble(request.getParameter("salary")));
+        user.setDateOfBirth(LocalDate.parse(request.getParameter("dateOfBirth"), DATE_TIME_FORMATTER));
+        return user;
     }
 }

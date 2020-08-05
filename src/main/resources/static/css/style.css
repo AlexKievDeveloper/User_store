@@ -3,7 +3,7 @@ label {
     color: #FFFF00;
 }
 
-select, textarea{
+select, textarea {
     color: black;
 }
 
@@ -18,7 +18,7 @@ textarea:focus, input:focus {
 }
 
 .h1 {
-    font-weight:700;
+    font-weight: 700;
     color: #FFFF00;
 }
 

@@ -1,21 +1,23 @@
 package com.glushkov.web.templater;
 
-import freemarker.template.TemplateException;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PageGeneratorITest {
 
     @Test
-    void getPageTest() throws IOException, TemplateException {
+    void getPageTest() throws IOException {
         //prepare
         Path path = Paths.get("src/test/resources/PageForTestPageGenerator.html");
         byte[] bytes = Files.readAllBytes(path);
