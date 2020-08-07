@@ -6,9 +6,9 @@ import com.glushkov.service.UserService;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.Test;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,7 +24,7 @@ class RemoveUserServletITest {
     private static final String DROP_TABLE = "DROP TABLE users";
 
     @Test
-    void doPostTest() throws ServletException, SQLException {
+    void doPostTest() throws SQLException, IOException {
         //prepare
         JdbcDataSource dataSource = new JdbcDataSource();
         dataSource.setURL("jdbc:h2:~/test/resources/db;INIT=runscript from 'src/test/resources/h2-test-schema.sql';");

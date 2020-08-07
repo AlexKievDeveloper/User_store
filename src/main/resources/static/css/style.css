@@ -17,9 +17,13 @@ textarea:focus, input:focus {
     opacity: 1;
 }
 
-.h1 {
+h1 {
     font-weight: 700;
     color: #FFFF00;
+}
+
+h2 {
+    color: yellow;
 }
 
 /*Page*/
@@ -38,7 +42,17 @@ textarea:focus, input:focus {
 }
 
 .page_add_user_form {
-    margin-left: 130px;
+    margin-left: 70px;
+}
+
+.search-th {
+    margin-left: 500px;
+    margin-right: -500px;
+}
+
+.search {
+    width: 300px;
+    margin: 0px;
 }
 
 /*Form and Edit*/

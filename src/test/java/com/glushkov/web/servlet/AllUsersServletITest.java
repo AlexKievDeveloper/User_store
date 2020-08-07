@@ -7,18 +7,18 @@ import org.eclipse.jetty.server.HttpOutput;
 import org.eclipse.jetty.server.Response;
 import org.junit.jupiter.api.Test;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
 
 class AllUsersServletITest {
 
     @Test
-    void doGetTest() throws ServletException {
+    void doGetTest() throws IOException {
         //prepare
 
         UserService mockUserService = mock(UserService.class);

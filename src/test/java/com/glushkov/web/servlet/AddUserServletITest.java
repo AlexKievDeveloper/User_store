@@ -10,9 +10,9 @@ import org.eclipse.jetty.server.Response;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.Test;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,7 +29,7 @@ class AddUserServletITest {
     private static final String DROP_TABLE = "DROP TABLE users";//TODO сделать не константой и переместить внутрь метода?
 
     @Test
-    void doGetTest() throws ServletException {
+    void doGetTest() throws IOException {
         //prepare
         UserService mockUserService = mock(UserService.class);
         AddUserServlet addUserServlet = new AddUserServlet(mockUserService);
@@ -49,7 +49,7 @@ class AddUserServletITest {
     }
 
     @Test
-    void doPostTest() throws SQLException, ServletException {
+    void doPostTest() throws SQLException, IOException {
         //prepare
         JdbcDataSource dataSource = new JdbcDataSource();
         dataSource.setURL("jdbc:h2:~/test/resources/db;INIT=runscript from 'src/test/resources/h2-test-schema.sql';");

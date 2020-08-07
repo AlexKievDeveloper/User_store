@@ -1,37 +1,38 @@
 package com.glushkov.service;
 
-import com.glushkov.dao.jdbc.JdbcUserDao;
+import com.glushkov.dao.UserDao;
 import com.glushkov.entity.User;
 
-import java.sql.SQLException;
 import java.util.List;
 
 
 public class UserService {
 
-    private JdbcUserDao jdbcUserDao;
+    private final UserDao userDao;
 
-    public UserService(JdbcUserDao jdbcUserDao) {
-        this.jdbcUserDao = jdbcUserDao;
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
     }
 
-    public List<User> findAll() throws SQLException {
-        return jdbcUserDao.findAll();
+    public List<User> findAll() {
+        return userDao.findAll();
     }
 
-    public void save(User user) throws SQLException {
-        jdbcUserDao.save(user);
+    public void save(User user) {
+        userDao.save(user);
     }
 
-    public User findById(int id) throws SQLException {
-        return jdbcUserDao.findById(id);
+    public List<User>findByName(String name) { return userDao.findByName(name); }
+
+    public User findById(int id) {
+        return userDao.findById(id);
     }
 
-    public void update(User user) throws SQLException {
-        jdbcUserDao.update(user);
+    public void update(User user) {
+        userDao.update(user);
     }
 
-    public void delete(int id) throws SQLException {
-        jdbcUserDao.delete(id);
+    public void delete(int id) {
+        userDao.delete(id);
     }
 }

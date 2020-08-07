@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class ErrorHandler extends ErrorPageErrorHandler {
+public class DefaultErrorHandler extends ErrorPageErrorHandler {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -23,20 +23,18 @@ public class ErrorHandler extends ErrorPageErrorHandler {
             throws IOException {
 
         String servletName = (String) request.getAttribute("javax.servlet.error.servlet_name");
-        Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");
+        Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
 
-        logger.error("Error in servlet: {}", servletName, throwable);
+        logger.error("Error in servlet: {}", servletName, exception);
 
         baseRequest.setHandled(true);
 
-        message = "Internal server error. Please try again later. We are working to fix the problem. Sorry for the inconvenience.";
-
-        Map<String, Object> input = new HashMap<>();
-        input.put("code", code);
-        input.put("message", message);
+        Map<String, Object> parameterMap = new HashMap<>();
+        parameterMap.put("code", code);
+        parameterMap.put("message", message);
 
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        response.getWriter().println(PageGenerator.instance().getPage("error.ftl", input));
+        response.getWriter().println(PageGenerator.instance().getPage("error.ftl", parameterMap));
     }
 }

@@ -16,10 +16,10 @@
     <div class="row">
         <div class="col-lg-12">
             <div>
-                <h1 class="h1"> HTTP ERROR ${code} </h1>
+                <h1> HTTP ERROR ${code} </h1>
             </div>
             <div>
-                <h1 class="h1"> Message: ${message} </h1>
+                <h2> Message: ${message} </h2>
             </div>
         </div>
     </div>

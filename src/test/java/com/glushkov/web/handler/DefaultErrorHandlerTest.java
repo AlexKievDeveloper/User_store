@@ -15,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ErrorHandlerTest {
+class DefaultErrorHandlerTest {
 
     @Test
     void generateAcceptableResponse() throws IOException {
         //prepare
-        ErrorHandler errorHandler = new ErrorHandler();
+        DefaultErrorHandler defaultErrorHandler = new DefaultErrorHandler();
 
         Request mockBaseRequest = mock(Request.class);
         HttpServletRequest mockRequest = mock(Request.class);
@@ -37,7 +37,7 @@ class ErrorHandlerTest {
         String mimeType = "text/html";
 
         //when
-        errorHandler.generateAcceptableResponse(mockBaseRequest, mockRequest, response, code, message, mimeType);
+        defaultErrorHandler.generateAcceptableResponse(mockBaseRequest, mockRequest, response, code, message, mimeType);
 
         //then
         assertEquals(500, response.getStatus());

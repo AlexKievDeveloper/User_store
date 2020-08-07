@@ -3,19 +3,22 @@ package com.glushkov.dao;
 
 import com.glushkov.entity.User;
 
-import java.sql.SQLException;
 import java.util.List;
 
 
 public interface UserDao {
 
-    User findById(int id) throws SQLException;
+    User findById(int id);
 
-    List<User> findAll() throws SQLException;
+    List<User> findByName(String name);
 
-    void save(User user) throws SQLException;
+    List<User> findAll();
 
-    void update(User user) throws SQLException;
+    void save(User user);
 
-    void delete(int userId) throws SQLException;
+    void update(User user);
+
+    void delete(int userId);
+
+
 }

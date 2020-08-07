@@ -21,7 +21,7 @@
             <div class="form">
                 <form action="/users/add" method="POST">
                     <label for="name">Name
-                        <input type="text" name="firstName" id="name" placeholder="Enter your name" class="input"
+                        <input type="search" name="firstName" id="name" placeholder="Enter your name" class="input"
                                required>
                     </label>
                     <label for="surname">Surname

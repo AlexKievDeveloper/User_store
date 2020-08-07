@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class UserRowMapper {
 
-    public User userRowMapper(ResultSet resultSet) throws SQLException {
+    public User mapRow(ResultSet resultSet) throws SQLException {
 
         User user = new User();
 

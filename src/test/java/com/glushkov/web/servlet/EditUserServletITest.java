@@ -11,9 +11,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -36,7 +36,7 @@ class EditUserServletITest {
     private static EditUserServlet editUserServlet = new EditUserServlet(userService);
 
     @BeforeAll
-    static void setUp() throws SQLException {
+    static void setUp() {
         dataSource.setURL("jdbc:h2:~/test/resources/db;INIT=runscript from 'src/test/resources/h2-test-schema.sql';");
         dataSource.setUser("h2");
         dataSource.setPassword("h2");
@@ -51,7 +51,7 @@ class EditUserServletITest {
     }
 
     @Test
-    void doGetTest() throws ServletException {
+    void doGetTest() throws IOException {
         //prepare
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
         HttpChannel mockHttpChannel = mock(HttpChannel.class);
@@ -69,7 +69,7 @@ class EditUserServletITest {
     }
 
     @Test
-    void doPostTest() throws ServletException, SQLException {
+    void doPostTest() throws IOException {
         //prepare
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
 

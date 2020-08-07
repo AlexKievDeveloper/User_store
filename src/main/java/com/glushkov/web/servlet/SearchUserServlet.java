@@ -1,6 +1,5 @@
 package com.glushkov.web.servlet;
 
-
 import com.glushkov.entity.User;
 import com.glushkov.service.UserService;
 import com.glushkov.web.templater.PageGenerator;
@@ -13,25 +12,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-public class AllUsersServlet extends HttpServlet {
+public class SearchUserServlet extends HttpServlet {
 
     private final UserService userService;
 
-    public AllUsersServlet(UserService userService) {
+    public SearchUserServlet(UserService userService) {
         this.userService = userService;
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        List<User> usersList = userService.findAll();
+        String enteredName = request.getParameter("enteredName");
 
-        Map<String, Object> usersMap = new HashMap<>();
-        usersMap.put("users", usersList);
+        List<User> usersList = userService.findByName(enteredName);
 
         PageGenerator pageGenerator = PageGenerator.instance();
 
-        String page = pageGenerator.getPage("page.ftl", usersMap);
+        Map<String, Object> usersMap = new HashMap<>();
+
+        String page;
+
+        if (usersList.isEmpty()) {
+            usersMap.put("message", "Sorry, no users were found for your request: " + enteredName);
+        } else {
+            usersMap.put("users", usersList);
+        }
+        page = pageGenerator.getPage("page.ftl", usersMap);
 
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);

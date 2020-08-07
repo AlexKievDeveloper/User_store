@@ -17,11 +17,11 @@
     <thead class="thead-dark">
     <tr>
         <th scope="col">Id</th>
-        <th scope="col">First name</th>
-        <th scope="col">Second name</th>
-        <th scope="col">Salary</th>
-        <th scope="col">Date of birth</th>
-        <th scope="col">
+        <th scope="col" class="col-lg-2">First name</th>
+        <th scope="col" class="col-lg-2">Second name</th>
+        <th scope="col" class="col-lg-2">Salary</th>
+        <th scope="col" class="col-lg-2">Date of birth</th>
+        <th scope="col" class="col-lg-2">
             <div class="page_add_user_form">
                 <form action="/users/add" method="GET">
                     <button>
@@ -30,10 +30,22 @@
                 </form>
             </div>
         </th>
+        <th class="search-th col-lg-2">
+            <nav class="navbar navbar-light bg-light search">
+                <form action="/users/search" method="GET" class="form-inline">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <input type="submit" value="OK" class="input-group-text" id="basic-addon1">
+                        </div>
+                        <input type="text" class="form-control" name="enteredName" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                    </div>
+                </form>
+            </nav>
+        </th>
     </tr>
     </thead>
     <tbody>
-    <#list users as user>
+    <#list (users)! as user>
         <tr>
             <td>${user.id}</td>
             <td>${user.firstName}</td>
@@ -64,7 +76,7 @@
     </#list>
     </tbody>
 </table>
-
+<h3>${(message)!}</h3>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

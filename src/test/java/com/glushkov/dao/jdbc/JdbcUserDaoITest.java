@@ -41,7 +41,7 @@ class JdbcUserDaoITest {
     }
 
     @Test
-    void findAllTest() throws SQLException {
+    void findAllTest() {
         //when
         List<User> listOfUsersMap = jdbcUserDao.findAll();
 
@@ -59,7 +59,7 @@ class JdbcUserDaoITest {
     }
 
     @Test
-    void saveTest() throws SQLException {
+    void saveTest() {
         //prepare
         List<User> listOfUsersMapBefore = jdbcUserDao.findAll();
         assertEquals(5, listOfUsersMapBefore.size());
@@ -88,7 +88,7 @@ class JdbcUserDaoITest {
     }
 
     @Test
-    void findByIdTest() throws SQLException {
+    void findByIdTest() {
         //when
         User userFromDb = jdbcUserDao.findById(1);
 
@@ -102,7 +102,7 @@ class JdbcUserDaoITest {
     }
 
     @Test
-    void updateTest() throws SQLException {
+    void updateTest() {
         //prepare
         User user = new User();
         user.setId(2);
@@ -126,7 +126,7 @@ class JdbcUserDaoITest {
     }
 
     @Test
-    void deleteTest() throws SQLException {
+    void deleteTest() {
         //prepare
         assertEquals(5, jdbcUserDao.findAll().size());
         //when

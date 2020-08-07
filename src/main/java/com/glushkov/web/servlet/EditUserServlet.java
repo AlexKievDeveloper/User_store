@@ -5,10 +5,10 @@ import com.glushkov.entity.User;
 import com.glushkov.service.UserService;
 import com.glushkov.web.templater.PageGenerator;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -19,40 +19,34 @@ public class EditUserServlet extends HttpServlet {
 
     private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");//TODO Конструктор или константа выше?
 
-    private UserService userService; //TODO сделать ли userService константой (final)?
+    private final UserService userService;
 
     public EditUserServlet(UserService userService) {
         this.userService = userService;
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        try {
-            User user = userService.findById(Integer.parseInt(request.getParameter("id")));
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-            Map<String, Object> userMap = getUserMap(user);
+        User user = userService.findById(Integer.parseInt(request.getParameter("id")));
 
-            PageGenerator pageGenerator = PageGenerator.instance();
+        Map<String, Object> userMap = getUserMap(user);
 
-            String page = pageGenerator.getPage("edit.ftl", userMap);
+        PageGenerator pageGenerator = PageGenerator.instance();
 
-            response.setContentType("text/html;charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().println(page);
-        } catch (Exception ex) {
-            throw new ServletException(ex);
-        }
+        String page = pageGenerator.getPage("edit.ftl", userMap);
+
+        response.setContentType("text/html;charset=utf-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().println(page);
     }
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        try {
-            User user = getUser(request);
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-            userService.update(user);
+        User user = getUser(request);
 
-            response.sendRedirect("/users");
-        } catch (Exception ex) {
-            throw new ServletException(ex);
-        }
+        userService.update(user);
+
+        response.sendRedirect("/users");
     }
 
     private Map<String, Object> getUserMap(User user) {

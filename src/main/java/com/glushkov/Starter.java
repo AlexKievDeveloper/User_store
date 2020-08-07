@@ -3,11 +3,8 @@ package com.glushkov;
 
 import com.glushkov.dao.jdbc.JdbcUserDao;
 import com.glushkov.service.UserService;
-import com.glushkov.web.handler.ErrorHandler;
-import com.glushkov.web.servlet.AddUserServlet;
-import com.glushkov.web.servlet.AllUsersServlet;
-import com.glushkov.web.servlet.EditUserServlet;
-import com.glushkov.web.servlet.RemoveUserServlet;
+import com.glushkov.web.handler.DefaultErrorHandler;
+import com.glushkov.web.servlet.*;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -31,20 +28,21 @@ public class Starter {
         AddUserServlet addUserServlet = new AddUserServlet(userService);
         EditUserServlet editUserServlet = new EditUserServlet(userService);
         RemoveUserServlet removeUserServlet = new RemoveUserServlet(userService);
+        SearchUserServlet searchUserServlet = new SearchUserServlet(userService);
 
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         servletContextHandler.setResourceBase("src/main/resources/static");
-        servletContextHandler.setErrorHandler(new ErrorHandler());
+        servletContextHandler.setErrorHandler(new DefaultErrorHandler());
 
         servletContextHandler.addServlet(new ServletHolder(allUsersServlet), "/users");
         servletContextHandler.addServlet(new ServletHolder(addUserServlet), "/users/add");
         servletContextHandler.addServlet(new ServletHolder(editUserServlet), "/users/edit");
         servletContextHandler.addServlet(new ServletHolder(removeUserServlet), "/users/remove");
+        servletContextHandler.addServlet(new ServletHolder(searchUserServlet), "/users/search");
         servletContextHandler.addServlet(DefaultServlet.class, "/");
 
         Server server = new Server(8080);
         server.setHandler(servletContextHandler);
-        server.addBean(new ErrorHandler());
         server.start();
     }
 }
@@ -52,7 +50,7 @@ public class Starter {
 //TODO 1)В папках db постоянное пишет loading. Предполагаю что причина может быть в DBVizualizer но это не точно
 // 2) Не могу изменить цвет шрифта в error.ftl (message: h1->h2 - yellow)
 // 3) Не получилось сделать Полноценные тесты на сервлеты потому что тестовая библиотека использует классы которые удалены,
-// не могу разобраться с protected final ByteArrayOutputStream output = new ByteArrayOutputStream();, System.setOut(new PrintStream(output));
+// а в своих тестах не могу разобраться с protected final ByteArrayOutputStream output = new ByteArrayOutputStream();, System.setOut(new PrintStream(output));
 // System.setOut(null); и получить в работу поток байт в response
 // 4) В форме в поле для даты все плейсхолдера выводиться дд.мм.гггг - язык берётся у браузера нужно вывести на английском
 // 5) Во время тестирования ErrorHandler выводится стек трейс ошибки которая выбрасывается во время теста

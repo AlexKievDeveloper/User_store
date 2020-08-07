@@ -27,7 +27,7 @@ class UserRowMapperTest {
         UserRowMapper userRowMapper = new UserRowMapper();
 
         //when
-        User actual = userRowMapper.userRowMapper(mockResultSet);
+        User actual = userRowMapper.mapRow(mockResultSet);
 
         //then
         assertNotNull(actual);

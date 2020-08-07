@@ -23,20 +23,20 @@ public class PageGenerator {
 
     private static PageGenerator pageGenerator;
 
+    private final Configuration cfg;
+
     public static PageGenerator instance() throws IOException {
         if (pageGenerator == null)
             pageGenerator = new PageGenerator();
         return pageGenerator;
     }
 
-    private final Configuration cfg;
-
     public String getPage(String filename, Map<String, Object> input) {
 
         Writer stream = new StringWriter();
 
         try {
-        Template template = cfg.getTemplate(filename);
+            Template template = cfg.getTemplate(filename);
             template.process(input, stream);
         } catch (TemplateException | IOException e) {
             throw new RuntimeException(e);
