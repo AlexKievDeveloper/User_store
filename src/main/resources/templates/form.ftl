@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://localhost:8080/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="body">
 <div class="container">
@@ -30,11 +30,11 @@
                     </label>
                     <label for="salary"> Salary
                         <input type="number" step=".01" min="0" name="salary" id="salary"
-                               value="${salary?string.@salary}" placeholder="Enter your salary" class="input"
+                               value="${(salary?string.@salary)!}" placeholder="Enter your salary" class="input"
                                required>
                     </label>
                     <label for="date_of_birth"> Date of birth
-                        <input type="date" name="dateOfBirth" id="date_of_birth" value="${dateOfBirth}"
+                        <input type="date" name="dateOfBirth" id="date_of_birth" value="${(dateOfBirth)!}"
                                placeholder="Enter your date of birth" class="input"
                                required>
                     </label>

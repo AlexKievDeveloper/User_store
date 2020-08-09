@@ -18,14 +18,13 @@ public class DefaultErrorHandler extends ErrorPageErrorHandler {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Override
     protected void generateAcceptableResponse(Request baseRequest, HttpServletRequest request, HttpServletResponse response, int code, String message, String mimeType)
             throws IOException {
 
         String servletName = (String) request.getAttribute("javax.servlet.error.servlet_name");
         Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
 
-        logger.error("Error in servlet: {}", servletName, exception);
+        logger.error("Error in servlet: {}, code: {}, message: {}", servletName, code, message, exception);
 
         baseRequest.setHandled(true);
 

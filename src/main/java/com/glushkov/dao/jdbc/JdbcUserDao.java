@@ -2,30 +2,24 @@ package com.glushkov.dao.jdbc;
 
 
 import com.glushkov.dao.UserDao;
+import com.glushkov.dao.jdbc.generator.QueryGenerator;
 import com.glushkov.dao.jdbc.mapper.UserRowMapper;
 import com.glushkov.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class JdbcUserDao implements UserDao {
 
-    private static final String FIND_ALL = "SELECT id, firstname, secondname, salary, dateofbirth FROM users;";
-
-    private static final String SAVE = "INSERT INTO users(firstname, secondname, salary, dateofbirth) VALUES (?, ?, ?, ?);";
-
-    private static final String FIND_BY_ID = "SELECT id, firstname, secondname, salary, dateofbirth FROM users WHERE id = ?;";
-
-    private static final String FIND_BY_NAME = "SELECT id, firstname, secondname, salary, dateofbirth FROM users WHERE firstname LIKE ?;";
-
-    private static final String UPDATE = "UPDATE users SET firstname = ?, secondname = ?, salary = ? , dateofbirth = ? WHERE id = ?;";
-
-    private static final String DELETE = "DELETE FROM users WHERE id = ?;";
+    private static final QueryGenerator QUERY_GENERATOR = new QueryGenerator();
 
     private static final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
 
@@ -41,7 +35,7 @@ public class JdbcUserDao implements UserDao {
 
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(FIND_ALL)) {
+             ResultSet resultSet = statement.executeQuery(QUERY_GENERATOR.findAll(User.class))) {
 
             List<User> usersList = new ArrayList<>();
 
@@ -59,14 +53,9 @@ public class JdbcUserDao implements UserDao {
     public void save(User user) {
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SAVE)) {
+             Statement statement = connection.createStatement()) {
 
-            preparedStatement.setString(1, user.getFirstName());
-            preparedStatement.setString(2, user.getSecondName());
-            preparedStatement.setDouble(3, user.getSalary());
-            preparedStatement.setDate(4, Date.valueOf(user.getDateOfBirth()));
-
-            preparedStatement.executeUpdate();
+            statement.execute(QUERY_GENERATOR.save(user));
         } catch (SQLException e) {
             logger.error("Error while saving user to DB", e);
         }
@@ -75,40 +64,36 @@ public class JdbcUserDao implements UserDao {
     public User findById(int id) {
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID)) {
-            preparedStatement.setInt(1, id);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(QUERY_GENERATOR.findByID(User.class, id))) {
 
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            resultSet.next();
 
-                resultSet.next();
-
-                if (!resultSet.isLast()) {
-                    throw new RuntimeException("More than one row found for id: " + id);
-                }
-
-                return USER_ROW_MAPPER.mapRow(resultSet);
+            if (!resultSet.isLast()) {
+                throw new RuntimeException("More than one row found for id: " + id);
             }
+
+            return USER_ROW_MAPPER.mapRow(resultSet);
         } catch (SQLException e) {
             logger.error("Error while getting user from DB, id: {}", id, e);
             throw new RuntimeException(e);
         }
     }
 
-    public List<User> findByName(String name){
+    public List<User> findByName(String name) {
+
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_NAME)) {
-            preparedStatement.setString(1, name + "%");
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(QUERY_GENERATOR.findByName(User.class, name))) {
 
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            List<User> usersList = new ArrayList<>();
 
-                List<User> usersList = new ArrayList<>();
-                while (resultSet.next()) {
-                    User user = USER_ROW_MAPPER.mapRow(resultSet);
-                    usersList.add(user);
-                }
-
-                return usersList;
+            while (resultSet.next()) {
+                User user = USER_ROW_MAPPER.mapRow(resultSet);
+                usersList.add(user);
             }
+
+            return usersList;
         } catch (SQLException e) {
             logger.error("Error while getting user from DB, name: {}", name, e);
             throw new RuntimeException(e);
@@ -118,26 +103,20 @@ public class JdbcUserDao implements UserDao {
     public void update(User user) {
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
+             Statement statement = connection.createStatement()) {
 
-            preparedStatement.setString(1, user.getFirstName());
-            preparedStatement.setString(2, user.getSecondName());
-            preparedStatement.setDouble(3, user.getSalary());
-            preparedStatement.setDate(4, Date.valueOf(user.getDateOfBirth()));
-            preparedStatement.setInt(5, user.getId());
-
-            preparedStatement.executeUpdate();
+            statement.execute(QUERY_GENERATOR.update(user));
         } catch (SQLException e) {
             logger.error("Error while updating user in DB, id: {}", user.getId());
         }
     }
 
     public void delete(int id) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE)) {
 
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement()) {
+
+            statement.execute(QUERY_GENERATOR.delete(User.class, id));
         } catch (SQLException e) {
             logger.error("Error while deleting user from DB, id: {}", id, e);
         }

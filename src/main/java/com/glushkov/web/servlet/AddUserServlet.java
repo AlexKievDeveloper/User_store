@@ -3,15 +3,16 @@ package com.glushkov.web.servlet;
 
 import com.glushkov.entity.User;
 import com.glushkov.service.UserService;
+import com.glushkov.web.templater.PageGenerator;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class AddUserServlet extends HttpServlet {
@@ -26,7 +27,9 @@ public class AddUserServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        String page = new String(Files.readAllBytes(Paths.get("src/main/resources/templates/form.ftl")));
+        Map<String, Object> usersMap = new HashMap<>();
+        PageGenerator pageGenerator = PageGenerator.instance();
+        String page = pageGenerator.getPage("form.ftl", usersMap);
 
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);

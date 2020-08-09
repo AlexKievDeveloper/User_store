@@ -9,16 +9,32 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.resource.Resource;
 import org.h2.jdbcx.JdbcDataSource;
+
+import java.io.BufferedInputStream;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.util.Properties;
 
 
 public class Starter {
     public static void main(String[] args) throws Exception {
 
+        Properties properties = new Properties();
+
+        BufferedInputStream propertiesBufferedInputStream = new BufferedInputStream(Starter.class.getResourceAsStream("/application.properties"));
+        properties.load(propertiesBufferedInputStream);
+
         JdbcDataSource dataSource = new JdbcDataSource();
-        dataSource.setURL("jdbc:h2:file:~/src/main/resources/db/user_store.h2.db;INIT=runscript from 'src/main/resources/h2-schema.sql';");
-        dataSource.setUser("h2");
-        dataSource.setPassword("h2");
+        dataSource.setURL(properties.getProperty("jdbc.host"));
+        dataSource.setUser(properties.getProperty("jdbc.user"));
+        dataSource.setPassword(properties.getProperty("jdbc.password"));
+
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement()) {
+            statement.execute(properties.getProperty("CREATE_TABLE"));
+        }
 
         JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
 
@@ -31,7 +47,6 @@ public class Starter {
         SearchUserServlet searchUserServlet = new SearchUserServlet(userService);
 
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        servletContextHandler.setResourceBase("src/main/resources/static");
         servletContextHandler.setErrorHandler(new DefaultErrorHandler());
 
         servletContextHandler.addServlet(new ServletHolder(allUsersServlet), "/users");
@@ -39,7 +54,11 @@ public class Starter {
         servletContextHandler.addServlet(new ServletHolder(editUserServlet), "/users/edit");
         servletContextHandler.addServlet(new ServletHolder(removeUserServlet), "/users/remove");
         servletContextHandler.addServlet(new ServletHolder(searchUserServlet), "/users/search");
+
+        Resource resource = Resource.newClassPathResource(properties.getProperty("PATH_TO_RESOURCE"));
+        servletContextHandler.setBaseResource(resource);
         servletContextHandler.addServlet(DefaultServlet.class, "/");
+        servletContextHandler.setWelcomeFiles(new String[]{"home.ftl"});
 
         Server server = new Server(8080);
         server.setHandler(servletContextHandler);
@@ -47,13 +66,10 @@ public class Starter {
     }
 }
 
-//TODO 1)В папках db постоянное пишет loading. Предполагаю что причина может быть в DBVizualizer но это не точно
-// 2) Не могу изменить цвет шрифта в error.ftl (message: h1->h2 - yellow)
-// 3) Не получилось сделать Полноценные тесты на сервлеты потому что тестовая библиотека использует классы которые удалены,
-// а в своих тестах не могу разобраться с protected final ByteArrayOutputStream output = new ByteArrayOutputStream();, System.setOut(new PrintStream(output));
-// System.setOut(null); и получить в работу поток байт в response
-// 4) В форме в поле для даты все плейсхолдера выводиться дд.мм.гггг - язык берётся у браузера нужно вывести на английском
-// 5) Во время тестирования ErrorHandler выводится стек трейс ошибки которая выбрасывается во время теста
-// 6) Вывод стек трейса кроме моего Логгера и ещё: 20:01:34.339[qtp1373419525-26]WARN  org.eclipse.jetty.server.HttpChannel - /users/add
-// javax.servlet.ServletException: java.time.format.DateTimeParseException:
-// 7) Обдумать response.sendError(500, ex.getMessage()); (бросает IOException который будет проброшен) вместо throw new ServletException(ex);
+
+//TODO
+// 1) База данных в джарнике который лежит в home и в проекте который я открываю в идее одна на двоих??
+// 2) Гугл хром делает первую колонку шириной в пол экрана, а остальные прижимает к правому краю, не понимаю почему
+// 3) Над методами которые мы переопределили нужно ли везде использовать аннотацию @Override?
+//        a) Сделать тесты или мок или интеграционными
+//        b) Доработать H2 и создание базы данных

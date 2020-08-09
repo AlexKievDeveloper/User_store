@@ -1,5 +1,6 @@
 package com.glushkov.dao.jdbc;
 
+
 import com.glushkov.entity.User;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.AfterAll;
@@ -24,7 +25,7 @@ class JdbcUserDaoITest {
     private static JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
 
     @BeforeAll
-    static void setUp() throws SQLException {
+    static void setUp() {
         dataSource.setURL("jdbc:h2:~/test/resources/db;INIT=runscript from 'src/test/resources/h2-test-schema.sql';");
         dataSource.setUser("h2");
         dataSource.setPassword("h2");

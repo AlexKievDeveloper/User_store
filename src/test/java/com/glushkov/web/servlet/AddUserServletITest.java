@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 
 class AddUserServletITest {
 
-    private static final String DROP_TABLE = "DROP TABLE users";//TODO сделать не константой и переместить внутрь метода?
+    private static final String DROP_TABLE = "DROP TABLE users";
 
     @Test
     void doGetTest() throws IOException {

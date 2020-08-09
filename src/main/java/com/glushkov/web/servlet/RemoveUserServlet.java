@@ -20,7 +20,9 @@ public class RemoveUserServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         int id = Integer.parseInt(request.getParameter("id"));
+
         userService.delete(id);
+
         response.sendRedirect("/users");
     }
 }

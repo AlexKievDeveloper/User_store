@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class EditUserServlet extends HttpServlet {
 
-    private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");//TODO Конструктор или константа выше?
+    private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private final UserService userService;
 

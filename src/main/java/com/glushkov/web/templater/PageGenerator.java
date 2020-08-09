@@ -8,7 +8,6 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -19,36 +18,34 @@ import java.util.Map;
 
 public class PageGenerator {
 
-    private static final String HTML_DIR = "src/main/resources/templates";
-
     private static PageGenerator pageGenerator;
 
     private final Configuration cfg;
 
-    public static PageGenerator instance() throws IOException {
+    public static PageGenerator instance() {
         if (pageGenerator == null)
             pageGenerator = new PageGenerator();
         return pageGenerator;
     }
 
-    public String getPage(String filename, Map<String, Object> input) {
+    public String getPage(String filename, Map<String, Object> dataInMap) {
 
         Writer stream = new StringWriter();
 
         try {
             Template template = cfg.getTemplate(filename);
-            template.process(input, stream);
+            template.process(dataInMap, stream);
         } catch (TemplateException | IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error while getting template", e);
         }
 
         return stream.toString();
     }
 
-    private PageGenerator() throws IOException {
+    private PageGenerator() {
 
         cfg = new Configuration(Configuration.VERSION_2_3_30);
-        cfg.setDirectoryForTemplateLoading(new File(HTML_DIR));
+        cfg.setClassForTemplateLoading(this.getClass(), "/templates");
         cfg.setDefaultEncoding("UTF-8");
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
         cfg.setLogTemplateExceptions(false);

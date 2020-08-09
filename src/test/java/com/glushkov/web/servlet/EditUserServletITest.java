@@ -1,5 +1,6 @@
 package com.glushkov.web.servlet;
 
+
 import com.glushkov.dao.jdbc.JdbcUserDao;
 import com.glushkov.entity.User;
 import com.glushkov.service.UserService;
@@ -22,6 +23,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 
 class EditUserServletITest {
 

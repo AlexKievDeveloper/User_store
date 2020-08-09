@@ -1,5 +1,6 @@
 package com.glushkov.web.servlet;
 
+
 import com.glushkov.entity.User;
 import com.glushkov.service.UserService;
 import com.glushkov.web.templater.PageGenerator;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class SearchUserServlet extends HttpServlet {
 
@@ -37,6 +39,7 @@ public class SearchUserServlet extends HttpServlet {
         } else {
             usersMap.put("users", usersList);
         }
+
         page = pageGenerator.getPage("page.ftl", usersMap);
 
         response.setContentType("text/html;charset=utf-8");

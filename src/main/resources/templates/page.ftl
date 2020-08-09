@@ -16,10 +16,10 @@
 <table class="table">
     <thead class="thead-dark">
     <tr>
-        <th scope="col">Id</th>
+        <th scope="col" class="col-lg-1">Id</th>
         <th scope="col" class="col-lg-2">First name</th>
         <th scope="col" class="col-lg-2">Second name</th>
-        <th scope="col" class="col-lg-2">Salary</th>
+        <th scope="col" class="col-lg-1">Salary</th>
         <th scope="col" class="col-lg-2">Date of birth</th>
         <th scope="col" class="col-lg-2">
             <div class="page_add_user_form">
@@ -37,7 +37,8 @@
                         <div class="input-group-prepend">
                             <input type="submit" value="OK" class="input-group-text" id="basic-addon1">
                         </div>
-                        <input type="text" class="form-control" name="enteredName" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control" name="enteredName" placeholder="Username"
+                               aria-label="Username" aria-describedby="basic-addon1">
                     </div>
                 </form>
             </nav>
