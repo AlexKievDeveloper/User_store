@@ -1,6 +1,5 @@
 package com.glushkov.web.handler;
 
-
 import com.glushkov.web.templater.PageGenerator;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
@@ -13,13 +12,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class DefaultErrorHandler extends ErrorPageErrorHandler {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     protected void generateAcceptableResponse(Request baseRequest, HttpServletRequest request, HttpServletResponse response, int code, String message, String mimeType)
             throws IOException {
+
+        Map<String, Object> parameterMap = new HashMap<>();
 
         String servletName = (String) request.getAttribute("javax.servlet.error.servlet_name");
         Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
@@ -28,7 +28,6 @@ public class DefaultErrorHandler extends ErrorPageErrorHandler {
 
         baseRequest.setHandled(true);
 
-        Map<String, Object> parameterMap = new HashMap<>();
         parameterMap.put("code", code);
         parameterMap.put("message", message);
 

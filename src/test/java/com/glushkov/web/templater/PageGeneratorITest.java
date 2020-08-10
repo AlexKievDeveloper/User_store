@@ -1,6 +1,6 @@
 package com.glushkov.web.templater;
 
-
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -15,10 +15,10 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 class PageGeneratorITest {
 
     @Test
+    @DisplayName("Generates a page from ftl template and page variable values")
     void getPageTest() throws IOException {
         //prepare
         Path path = Paths.get("src/test/resources/PageForTestPageGenerator.html");
@@ -34,11 +34,11 @@ class PageGeneratorITest {
 
         List<Map<String, Object>> users = new ArrayList<>();
         users.add(user);
-        Map<String, Object> input = new HashMap<>();
-        input.put("users", users);
+        Map<String, Object> pageVariables = new HashMap<>();
+        pageVariables.put("users", users);
 
         //when
-        String actualPage = PageGenerator.instance().getPage("page.ftl", input);
+        String actualPage = PageGenerator.instance().getPage("page.ftl", pageVariables);
         //then
         assertEquals(expectedPage, actualPage);
     }

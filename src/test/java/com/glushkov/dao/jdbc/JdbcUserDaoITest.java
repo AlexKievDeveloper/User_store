@@ -1,20 +1,23 @@
 package com.glushkov.dao.jdbc;
 
-
+import com.glushkov.Starter;
 import com.glushkov.entity.User;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 
 class JdbcUserDaoITest {
 
@@ -25,10 +28,15 @@ class JdbcUserDaoITest {
     private static JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
 
     @BeforeAll
-    static void setUp() {
-        dataSource.setURL("jdbc:h2:~/test/resources/db;INIT=runscript from 'src/test/resources/h2-test-schema.sql';");
-        dataSource.setUser("h2");
-        dataSource.setPassword("h2");
+    static void setUp() throws IOException {
+        Properties properties = new Properties();
+
+        BufferedInputStream propertiesBufferedInputStream = new BufferedInputStream(Starter.class.getResourceAsStream("/tests.properties"));
+        properties.load(propertiesBufferedInputStream);
+
+        dataSource.setURL(properties.getProperty("jdbc.host")+properties.getProperty("create-table"));
+        dataSource.setUser(properties.getProperty("jdbc.user"));
+        dataSource.setPassword(properties.getProperty("jdbc.password"));
 
         for (int i = 0; i < 5; i++) {
             User user = new User();
@@ -42,6 +50,7 @@ class JdbcUserDaoITest {
     }
 
     @Test
+    @DisplayName("Returns a non-empty list of objects with non-empty object field values")
     void findAllTest() {
         //when
         List<User> listOfUsersMap = jdbcUserDao.findAll();
@@ -60,6 +69,7 @@ class JdbcUserDaoITest {
     }
 
     @Test
+    @DisplayName("Adds a user to the database")
     void saveTest() {
         //prepare
         List<User> listOfUsersMapBefore = jdbcUserDao.findAll();
@@ -89,6 +99,7 @@ class JdbcUserDaoITest {
     }
 
     @Test
+    @DisplayName("Returns the user by id")
     void findByIdTest() {
         //when
         User userFromDb = jdbcUserDao.findById(1);
@@ -103,6 +114,7 @@ class JdbcUserDaoITest {
     }
 
     @Test
+    @DisplayName("Updates the values of user columns in the database by primary key")
     void updateTest() {
         //prepare
         User user = new User();
@@ -127,6 +139,7 @@ class JdbcUserDaoITest {
     }
 
     @Test
+    @DisplayName("Removes a user from the database by primary key")
     void deleteTest() {
         //prepare
         assertEquals(5, jdbcUserDao.findAll().size());

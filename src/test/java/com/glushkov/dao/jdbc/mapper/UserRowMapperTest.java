@@ -1,6 +1,7 @@
 package com.glushkov.dao.jdbc.mapper;
 
 import com.glushkov.entity.User;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Date;
@@ -16,6 +17,7 @@ import static org.mockito.Mockito.when;
 class UserRowMapperTest {
 
     @Test
+    @DisplayName("Returns an object of class User from result set")
     void userRowMapperTest() throws SQLException {
         //prepare
         ResultSet mockResultSet = mock(ResultSet.class);

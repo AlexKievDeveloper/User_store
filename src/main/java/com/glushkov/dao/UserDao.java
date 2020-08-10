@@ -1,10 +1,8 @@
 package com.glushkov.dao;
 
-
 import com.glushkov.entity.User;
 
 import java.util.List;
-
 
 public interface UserDao {
 

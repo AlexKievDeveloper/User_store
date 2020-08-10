@@ -5,7 +5,6 @@ import com.glushkov.entity.User;
 
 import java.util.List;
 
-
 public class UserService {
 
     private final UserDao userDao;

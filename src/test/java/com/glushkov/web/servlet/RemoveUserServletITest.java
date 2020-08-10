@@ -1,37 +1,45 @@
 package com.glushkov.web.servlet;
 
-
+import com.glushkov.Starter;
 import com.glushkov.dao.jdbc.JdbcUserDao;
 import com.glushkov.entity.User;
 import com.glushkov.service.UserService;
 import org.h2.jdbcx.JdbcDataSource;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
 class RemoveUserServletITest {
     private static final String DROP_TABLE = "DROP TABLE users";
 
     @Test
+    @DisplayName("Processes the request and removes the user from the database by primary key")
     void doPostTest() throws SQLException, IOException {
         //prepare
+        Properties properties = new Properties();
         JdbcDataSource dataSource = new JdbcDataSource();
-        dataSource.setURL("jdbc:h2:~/test/resources/db;INIT=runscript from 'src/test/resources/h2-test-schema.sql';");
-        dataSource.setUser("h2");
-        dataSource.setPassword("h2");
+
+        BufferedInputStream propertiesBufferedInputStream = new BufferedInputStream(Starter.class.getResourceAsStream("/tests.properties"));
+        properties.load(propertiesBufferedInputStream);
+
+        dataSource.setURL(properties.getProperty("jdbc.host")+properties.getProperty("create-table"));
+        dataSource.setUser(properties.getProperty("jdbc.user"));
+        dataSource.setPassword(properties.getProperty("jdbc.password"));
 
         JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
         UserService UserService = new UserService(jdbcUserDao);

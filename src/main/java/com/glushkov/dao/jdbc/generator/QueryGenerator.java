@@ -28,10 +28,7 @@ public class QueryGenerator {
             }
         }
 
-        stringBuilder.append(stringJoiner);
-        stringBuilder.append(" FROM ");
-        stringBuilder.append(tableName);
-        stringBuilder.append(";");
+        stringBuilder.append(stringJoiner).append(" FROM ").append(tableName).append(";");
 
         return stringBuilder.toString();
     }
@@ -61,10 +58,7 @@ public class QueryGenerator {
         String columns = columnsBuilder.substring(0, columnsBuilder.length() - ", ".length());
         String values = valuesBuilder.substring(0, valuesBuilder.length() - ", ".length());
 
-        stringBuilder.append(tableName);
-        stringBuilder.append(columns).append(") ");
-        stringBuilder.append(values).append(")");
-        stringBuilder.append(";");
+        stringBuilder.append(tableName).append(columns).append(") ").append(values).append(")").append(";");
 
         return stringBuilder.toString();
     }
@@ -95,14 +89,8 @@ public class QueryGenerator {
             primaryKeyValue = primaryKeyEntry.getValue();
         }
 
-        stringBuilder.append(tableName);
-        stringBuilder.append(" SET ");
-        stringBuilder.append(stringJoiner);
-        stringBuilder.append(" WHERE ");
-        stringBuilder.append(primaryKeyName);
-        stringBuilder.append(" = ");
-        stringBuilder.append("'").append(primaryKeyValue).append("'");
-        stringBuilder.append(";");
+        stringBuilder.append(tableName).append(" SET ").append(stringJoiner).append(" WHERE ");
+        stringBuilder.append(primaryKeyName).append(" = ").append("'").append(primaryKeyValue).append("'").append(";");
 
         return stringBuilder.toString();
     }
@@ -128,14 +116,8 @@ public class QueryGenerator {
             }
         }
 
-        stringBuilder.append(stringJoiner);
-        stringBuilder.append(" FROM ");
-        stringBuilder.append(tableName);
-        stringBuilder.append(" WHERE ");
-        stringBuilder.append(primaryKeyName);
-        stringBuilder.append(" = ");
-        stringBuilder.append("'").append(id).append("'");
-        stringBuilder.append(";");
+        stringBuilder.append(stringJoiner).append(" FROM ").append(tableName).append(" WHERE ");
+        stringBuilder.append(primaryKeyName).append(" = ").append("'").append(id).append("'").append(";");
 
         return stringBuilder.toString();
     }
@@ -156,14 +138,8 @@ public class QueryGenerator {
             }
         }
 
-        stringBuilder.append(stringJoiner);
-        stringBuilder.append(" FROM ");
-        stringBuilder.append(tableName);
-        stringBuilder.append(" WHERE ");
-        stringBuilder.append("firstname");
-        stringBuilder.append(" ILIKE ");
-        stringBuilder.append("'").append(name).append("%'");
-        stringBuilder.append(";");
+        stringBuilder.append(stringJoiner).append(" FROM ").append(tableName).append(" WHERE ").append("firstname");
+        stringBuilder.append(" ILIKE ").append("'").append(name).append("%'").append(";");
 
         return stringBuilder.toString();
     }
@@ -186,12 +162,8 @@ public class QueryGenerator {
             }
         }
 
-        stringBuilder.append(tableName);
-        stringBuilder.append(" WHERE ");
-        stringBuilder.append(primaryKeyName);
-        stringBuilder.append(" = ");
-        stringBuilder.append("'").append(id).append("'");
-        stringBuilder.append(";");
+        stringBuilder.append(tableName).append(" WHERE ").append(primaryKeyName).append(" = ");
+        stringBuilder.append("'").append(id).append("'").append(";");
 
         return stringBuilder.toString();
     }
@@ -242,7 +214,7 @@ public class QueryGenerator {
         }
     }
 
-    private Map<String, Object> getPrimaryKey(Object value) {
+    Map<String, Object> getPrimaryKey(Object value) {
         try {
             for (Field declaredField : value.getClass().getDeclaredFields()) {
                 Column columnAnnotation = declaredField.getAnnotation(Column.class);

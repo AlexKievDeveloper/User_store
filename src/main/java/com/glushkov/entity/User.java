@@ -1,6 +1,5 @@
 package com.glushkov.entity;
 
-
 import com.glushkov.dao.jdbc.generator.Column;
 import com.glushkov.dao.jdbc.generator.Id;
 import com.glushkov.dao.jdbc.generator.Table;

@@ -1,6 +1,5 @@
 package com.glushkov;
 
-
 import com.glushkov.dao.jdbc.JdbcUserDao;
 import com.glushkov.service.UserService;
 import com.glushkov.web.handler.DefaultErrorHandler;
@@ -16,7 +15,6 @@ import java.io.BufferedInputStream;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.Properties;
-
 
 public class Starter {
     public static void main(String[] args) throws Exception {
@@ -68,7 +66,8 @@ public class Starter {
 
 
 //TODO
-// 1) База данных в джарнике который лежит в home и в проекте который я открываю в идее одна на двоих??
+// 1) Не получается создать inmemory базу данных "jdbc: h2: mem: test; DB_CLOSE_DELAY = -1;INIT=runscript from './src/test/resources/h2-test-schema.sql';"
+// с таблицей, no suitable driver found create local temporary table IF NOT EXISTS USERS
 // 2) Гугл хром делает первую колонку шириной в пол экрана, а остальные прижимает к правому краю, не понимаю почему
 // 3) Над методами которые мы переопределили нужно ли везде использовать аннотацию @Override?
 //        a) Сделать тесты или мок или интеграционными

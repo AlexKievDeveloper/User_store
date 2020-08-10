@@ -1,6 +1,6 @@
 package com.glushkov.web.servlet;
 
-
+import com.glushkov.Starter;
 import com.glushkov.dao.jdbc.JdbcUserDao;
 import com.glushkov.entity.User;
 import com.glushkov.service.UserService;
@@ -8,27 +8,30 @@ import org.eclipse.jetty.server.HttpChannel;
 import org.eclipse.jetty.server.HttpOutput;
 import org.eclipse.jetty.server.Response;
 import org.h2.jdbcx.JdbcDataSource;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 
 class AddUserServletITest {
 
     private static final String DROP_TABLE = "DROP TABLE users";
 
     @Test
+    @DisplayName("Processes the client's request and sends a response with status code, content type, encoding and a page with a registration form")
     void doGetTest() throws IOException {
         //prepare
         UserService mockUserService = mock(UserService.class);
@@ -49,12 +52,18 @@ class AddUserServletITest {
     }
 
     @Test
+    @DisplayName("Processes the request and adds the user to the database")
     void doPostTest() throws SQLException, IOException {
         //prepare
+        Properties properties = new Properties();
         JdbcDataSource dataSource = new JdbcDataSource();
-        dataSource.setURL("jdbc:h2:~/test/resources/db;INIT=runscript from 'src/test/resources/h2-test-schema.sql';");
-        dataSource.setUser("h2");
-        dataSource.setPassword("h2");
+
+        BufferedInputStream propertiesBufferedInputStream = new BufferedInputStream(Starter.class.getResourceAsStream("/tests.properties"));
+        properties.load(propertiesBufferedInputStream);
+
+        dataSource.setURL(properties.getProperty("jdbc.host")+properties.getProperty("create-table"));
+        dataSource.setUser(properties.getProperty("jdbc.user"));
+        dataSource.setPassword(properties.getProperty("jdbc.password"));
 
         JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
         UserService userService = new UserService(jdbcUserDao);

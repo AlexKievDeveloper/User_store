@@ -1,13 +1,11 @@
 package com.glushkov.web.servlet;
 
-
 import com.glushkov.service.UserService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
 
 public class RemoveUserServlet extends HttpServlet {
 

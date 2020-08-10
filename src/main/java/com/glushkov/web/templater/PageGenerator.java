@@ -1,6 +1,5 @@
 package com.glushkov.web.templater;
 
-
 import freemarker.core.AliasTemplateNumberFormatFactory;
 import freemarker.core.TemplateNumberFormatFactory;
 import freemarker.template.Configuration;
@@ -15,7 +14,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-
 public class PageGenerator {
 
     private static PageGenerator pageGenerator;
@@ -28,13 +26,13 @@ public class PageGenerator {
         return pageGenerator;
     }
 
-    public String getPage(String filename, Map<String, Object> dataInMap) {
+    public String getPage(String filename, Map<String, Object> pageVariables) {
 
         Writer stream = new StringWriter();
 
         try {
             Template template = cfg.getTemplate(filename);
-            template.process(dataInMap, stream);
+            template.process(pageVariables, stream);
         } catch (TemplateException | IOException e) {
             throw new RuntimeException("Error while getting template", e);
         }

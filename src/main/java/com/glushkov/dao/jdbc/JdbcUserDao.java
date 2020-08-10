@@ -1,6 +1,5 @@
 package com.glushkov.dao.jdbc;
 
-
 import com.glushkov.dao.UserDao;
 import com.glushkov.dao.jdbc.generator.QueryGenerator;
 import com.glushkov.dao.jdbc.mapper.UserRowMapper;
@@ -15,7 +14,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class JdbcUserDao implements UserDao {
 
@@ -58,6 +56,7 @@ public class JdbcUserDao implements UserDao {
             statement.execute(QUERY_GENERATOR.save(user));
         } catch (SQLException e) {
             logger.error("Error while saving user to DB", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -107,7 +106,8 @@ public class JdbcUserDao implements UserDao {
 
             statement.execute(QUERY_GENERATOR.update(user));
         } catch (SQLException e) {
-            logger.error("Error while updating user in DB, id: {}", user.getId());
+            logger.error("Error while updating user in DB, id: {}", user.getId(), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -119,6 +119,7 @@ public class JdbcUserDao implements UserDao {
             statement.execute(QUERY_GENERATOR.delete(User.class, id));
         } catch (SQLException e) {
             logger.error("Error while deleting user from DB, id: {}", id, e);
+            throw new RuntimeException(e);
         }
     }
 }

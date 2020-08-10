@@ -1,6 +1,5 @@
 package com.glushkov.web.servlet;
 
-
 import com.glushkov.entity.User;
 import com.glushkov.service.UserService;
 import com.glushkov.web.templater.PageGenerator;
@@ -14,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class AddUserServlet extends HttpServlet {
 
     private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -27,13 +25,11 @@ public class AddUserServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        Map<String, Object> usersMap = new HashMap<>();
-        PageGenerator pageGenerator = PageGenerator.instance();
-        String page = pageGenerator.getPage("form.ftl", usersMap);
+        Map<String, Object> userMap = new HashMap<>();
 
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println(page);
+        response.getWriter().println(PageGenerator.instance().getPage("form.ftl", userMap));
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

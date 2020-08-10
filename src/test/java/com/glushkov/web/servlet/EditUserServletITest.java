@@ -1,6 +1,6 @@
 package com.glushkov.web.servlet;
 
-
+import com.glushkov.Starter;
 import com.glushkov.dao.jdbc.JdbcUserDao;
 import com.glushkov.entity.User;
 import com.glushkov.service.UserService;
@@ -10,38 +10,45 @@ import org.eclipse.jetty.server.Response;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
 class EditUserServletITest {
 
     private static final String DROP_TABLE = "DROP TABLE users";
 
-    private static JdbcDataSource dataSource = new JdbcDataSource();
+    private static final JdbcDataSource dataSource = new JdbcDataSource();
 
-    private static JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
+    private static final JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
 
-    private static UserService userService = new UserService(jdbcUserDao);
+    private static final UserService userService = new UserService(jdbcUserDao);
 
-    private static EditUserServlet editUserServlet = new EditUserServlet(userService);
+    private static final EditUserServlet editUserServlet = new EditUserServlet(userService);
 
     @BeforeAll
-    static void setUp() {
-        dataSource.setURL("jdbc:h2:~/test/resources/db;INIT=runscript from 'src/test/resources/h2-test-schema.sql';");
-        dataSource.setUser("h2");
-        dataSource.setPassword("h2");
+    static void setUp() throws IOException {
+        Properties properties = new Properties();
+
+        BufferedInputStream propertiesBufferedInputStream = new BufferedInputStream(Starter.class.getResourceAsStream("/tests.properties"));
+        properties.load(propertiesBufferedInputStream);
+
+        dataSource.setURL(properties.getProperty("jdbc.host")+properties.getProperty("create-table"));
+        dataSource.setUser(properties.getProperty("jdbc.user"));
+        dataSource.setPassword(properties.getProperty("jdbc.password"));
 
         User user = new User();
         user.setFirstName("Alex");
@@ -53,6 +60,7 @@ class EditUserServletITest {
     }
 
     @Test
+    @DisplayName("Processes the client's request and sends a response with status code, content type, encoding and a page with user data")
     void doGetTest() throws IOException {
         //prepare
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
@@ -71,6 +79,7 @@ class EditUserServletITest {
     }
 
     @Test
+    @DisplayName("Processes the request and update the user data in the database")
     void doPostTest() throws IOException {
         //prepare
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);

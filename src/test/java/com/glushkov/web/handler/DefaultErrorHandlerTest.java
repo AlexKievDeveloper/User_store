@@ -1,10 +1,10 @@
 package com.glushkov.web.handler;
 
-
 import org.eclipse.jetty.server.HttpChannel;
 import org.eclipse.jetty.server.HttpOutput;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Response;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,10 +15,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
 class DefaultErrorHandlerTest {
 
     @Test
+    @DisplayName("Generates a response to the client if an error occurs during request processing")
     void generateAcceptableResponse() throws IOException {
         //prepare
         DefaultErrorHandler defaultErrorHandler = new DefaultErrorHandler();
