@@ -25,7 +25,7 @@
             <div class="users_table_form">
                 <form action="/users" method="GET">
                     <button>
-                        <img class="add" src="/img/users.png" alt="Table users" style="vertical-align:middle">
+                        <img class="add" src="/img/all-users.png" alt="Table users" style="vertical-align:middle">
                     </button>
                 </form>
             </div>
