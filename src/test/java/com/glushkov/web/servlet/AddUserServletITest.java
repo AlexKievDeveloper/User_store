@@ -34,8 +34,10 @@ class AddUserServletITest {
     @DisplayName("Processes the client's request and sends a response with status code, content type, encoding and a page with a registration form")
     void doGetTest() throws IOException {
         //prepare
-        UserService mockUserService = mock(UserService.class);
-        AddUserServlet addUserServlet = new AddUserServlet(mockUserService);
+        JdbcDataSource dataSource = new JdbcDataSource();
+        JdbcUserDao userDao = new JdbcUserDao(dataSource);
+        UserService userService = new UserService(userDao);
+        AddUserServlet addUserServlet = new AddUserServlet(userService);
 
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
         HttpChannel mockHttpChannel = mock(HttpChannel.class);

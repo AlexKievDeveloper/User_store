@@ -20,7 +20,6 @@ class AllUsersServletTest {
     @DisplayName("Processes the client's request and sends a response with valid status code, content type, encoding and content(Users table)")
     void doGetTest() throws IOException {
         //prepare
-
         UserService mockUserService = mock(UserService.class);
         AllUsersServlet allUsersServlet = new AllUsersServlet(mockUserService);
 

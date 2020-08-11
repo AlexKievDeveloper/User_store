@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
 public class AllOtherRequestServlet extends HttpServlet {
 
@@ -24,17 +23,12 @@ public class AllOtherRequestServlet extends HttpServlet {
         }
     }
 
-    InputStream readContent(String uri) throws IOException {
+    InputStream readContent(String uri) {
 
         if (uri.equals("/")) {
             uri = "/home.ftl";
         }
 
-        URL fileUrl = ClassLoader.getSystemResource("static" + uri);
-
-        if (fileUrl != null) {
-            return fileUrl.openStream();
-        }
-        throw new RuntimeException("Error while reading file content. Url was null)");
+        return getClass().getClassLoader().getResourceAsStream("static" + uri);
     }
 }

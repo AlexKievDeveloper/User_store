@@ -15,6 +15,8 @@ import java.sql.Statement;
 import java.util.Properties;
 
 public class Starter {
+    public static int PORT = Integer.parseInt(System.getenv("PORT"));
+
     public static void main(String[] args) throws Exception {
 
         Properties properties = new Properties();
@@ -23,9 +25,9 @@ public class Starter {
         properties.load(propertiesBufferedInputStream);
 
         JdbcDataSource dataSource = new JdbcDataSource();
-        dataSource.setURL(properties.getProperty("jdbc.host"));
-        dataSource.setUser(properties.getProperty("jdbc.user"));
-        dataSource.setPassword(properties.getProperty("jdbc.password"));
+        dataSource.setURL(properties.getProperty("db.host"));
+        dataSource.setUser(properties.getProperty("db.user"));
+        dataSource.setPassword(properties.getProperty("db.password"));
 
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
@@ -55,7 +57,7 @@ public class Starter {
 
         servletContextHandler.setWelcomeFiles(new String[]{"home.ftl"});
 
-        Server server = new Server(8080);
+        Server server = new Server(PORT);
         server.setHandler(servletContextHandler);
         server.start();
     }
@@ -65,8 +67,7 @@ public class Starter {
 //TODO
 // 1) Не получается создать inmemory базу данных "jdbc: h2: mem: test; DB_CLOSE_DELAY = -1;INIT=runscript from './src/test/resources/h2-test-schema.sql';"
 // с таблицей (create local temporary table  IF NOT EXISTS USERS): no suitable driver found
-// 2) Гугл хром делает первую колонку шириной в пол экрана, а остальные прижимает к правому краю, не понимаю почему
-// 3) Над методами которые мы переопределили нужно ли везде использовать аннотацию @Override или везде убрать?
-// 4) Не удаётся подключиться к БД через интерфейс IntellijIdea
-//        a) Тесты на 3 сервлета убрать мокито или интеграционную часть
-//        b) Доработать H2 и создание базы данных
+// 2) Не удаётся подключиться к БД через интерфейс IntellijIdea
+// 3) Гугл хром и интернет эксплоуэр делает первую колонку шириной в пол экрана, а остальные прижимает к правому краю, не понимаю почему
+// 4) Над методами которые мы переопределили нужно ли везде использовать аннотацию @Override или везде убрать?
+//       b) Доработать H2 и создание базы данных
