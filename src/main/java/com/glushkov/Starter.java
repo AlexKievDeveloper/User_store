@@ -7,7 +7,7 @@ import com.glushkov.web.servlet.*;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.h2.jdbcx.JdbcDataSource;
+import org.postgresql.ds.PGSimpleDataSource;
 
 import java.io.BufferedInputStream;
 import java.sql.Connection;
@@ -15,6 +15,7 @@ import java.sql.Statement;
 import java.util.Properties;
 
 public class Starter {
+
     public static int PORT = Integer.parseInt(System.getenv("PORT"));
 
     public static void main(String[] args) throws Exception {
@@ -24,8 +25,8 @@ public class Starter {
         BufferedInputStream propertiesBufferedInputStream = new BufferedInputStream(Starter.class.getResourceAsStream("/application.properties"));
         properties.load(propertiesBufferedInputStream);
 
-        JdbcDataSource dataSource = new JdbcDataSource();
-        dataSource.setURL(properties.getProperty("db.host"));
+        PGSimpleDataSource dataSource = new PGSimpleDataSource();
+        dataSource.setURL(properties.getProperty("db.url"));
         dataSource.setUser(properties.getProperty("db.user"));
         dataSource.setPassword(properties.getProperty("db.password"));
 
@@ -64,10 +65,3 @@ public class Starter {
 }
 
 
-//TODO
-// 1) Не получается создать inmemory базу данных "jdbc: h2: mem: test; DB_CLOSE_DELAY = -1;INIT=runscript from './src/test/resources/h2-test-schema.sql';"
-// с таблицей (create local temporary table  IF NOT EXISTS USERS): no suitable driver found
-// 2) Не удаётся подключиться к БД через интерфейс IntellijIdea
-// 3) Гугл хром и интернет эксплоуэр делает первую колонку шириной в пол экрана, а остальные прижимает к правому краю, не понимаю почему
-// 4) Над методами которые мы переопределили нужно ли везде использовать аннотацию @Override или везде убрать?
-//       b) Доработать H2 и создание базы данных
