@@ -16,7 +16,7 @@ class QueryGeneratorTest {
     void findAllTest() {
         //prepare
         QueryGenerator queryGenerator = new QueryGenerator();
-        String expectedQuery = "SELECT id, firstname, secondname, salary, dateofbirth FROM users;";
+        String expectedQuery = "SELECT id, firstName, secondName, salary, dateOfBirth FROM users;";
         //when
         String actualQuery = queryGenerator.findAll(User.class);
         //then
@@ -36,7 +36,7 @@ class QueryGeneratorTest {
         LocalDate dateOfBirth = LocalDate.of(1993, 6, 23);
         user.setDateOfBirth(dateOfBirth);
 
-        String expectedQuery = "INSERT INTO users (secondname, dateofbirth, firstname, salary) VALUES ('Mavrody', '1993-06-23', 'Kirill', 2000.0);";
+        String expectedQuery = "INSERT INTO users (firstName, dateOfBirth, salary, secondName) VALUES ('Kirill', '1993-06-23', 2000.0, 'Mavrody');";
         //when
         String actualQuery = queryGenerator.save(user);
         //then
@@ -57,7 +57,7 @@ class QueryGeneratorTest {
         LocalDate dateOfBirth = LocalDate.of(1993, 6, 23);
         user.setDateOfBirth(dateOfBirth);
 
-        String expectedQuery = "UPDATE users SET secondname = 'Mavrody', dateofbirth = '1993-06-23', firstname = 'Kirill', salary = 2000.0 WHERE id = '1';";
+        String expectedQuery = "UPDATE users SET firstName = 'Kirill', dateOfBirth = '1993-06-23', salary = 2000.0, secondName = 'Mavrody' WHERE id = '1';";
         //when
         String actualQuery = queryGenerator.update(user);
         //then
@@ -65,13 +65,25 @@ class QueryGeneratorTest {
     }
 
     @Test
-    @DisplayName("Generates a sql query to the database to get values of all listed columns for one row dy primary key")
+    @DisplayName("Generates a sql query to the database to get values of all listed columns for one row by primary key")
     void findByIDTest() {
         //prepare
         QueryGenerator queryGenerator = new QueryGenerator();
-        String expectedQuery = "SELECT id, firstname, secondname, salary, dateofbirth FROM users WHERE id = '1';";
+        String expectedQuery = "SELECT id, firstName, secondName, salary, dateOfBirth FROM users WHERE id = '1';";
         //when
         String actualQuery = queryGenerator.findByID(User.class, 1);
+        //then
+        assertEquals(expectedQuery, actualQuery);
+    }
+
+    @Test
+    @DisplayName("Generates a sql query to the database to get values of all listed columns for one row y primary key")
+    void findByNameTest() {
+        //prepare
+        QueryGenerator queryGenerator = new QueryGenerator();
+        String expectedQuery = "SELECT id, firstName, secondName, salary, dateOfBirth FROM users WHERE firstname ILIKE 'Alex%';";
+        //when
+        String actualQuery = queryGenerator.findByName(User.class, "Alex");
         //then
         assertEquals(expectedQuery, actualQuery);
     }
@@ -111,10 +123,10 @@ class QueryGeneratorTest {
         user.setDateOfBirth(dateOfBirth);
 
         Map<String, Object> expectedMap = new HashMap<>();
-        expectedMap.put("firstname", "'Kirill'");
-        expectedMap.put("secondname", "'Mavrody'");
+        expectedMap.put("firstName", "'Kirill'");
+        expectedMap.put("secondName", "'Mavrody'");
         expectedMap.put("salary", 2000.0);
-        expectedMap.put("dateofbirth", "'1993-06-23'");
+        expectedMap.put("dateOfBirth", "'1993-06-23'");
         //when
         Map<String, Object> actualMap = QueryGenerator.getFieldsValues(user);
         //then

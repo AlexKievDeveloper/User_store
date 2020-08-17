@@ -24,29 +24,18 @@ public class AddUserServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         Map<String, Object> userMap = new HashMap<>();
-
         response.setContentType("text/html;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().println(PageGenerator.instance().getPage("form.ftl", userMap));
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        User user = getUser(request);
-
-        userService.save(user);
-
-        response.sendRedirect("/users");
-    }
-
-    private User getUser(HttpServletRequest request) {
         User user = new User();
         user.setFirstName(request.getParameter("firstName"));
         user.setSecondName(request.getParameter("secondName"));
         user.setSalary(Double.parseDouble(request.getParameter("salary")));
         user.setDateOfBirth(LocalDate.parse(request.getParameter("dateOfBirth"), DATE_TIME_FORMATTER));
-        return user;
+        userService.save(user);
+        response.sendRedirect("/users");
     }
 }

@@ -11,13 +11,13 @@ public class User {
     @Id
     @Column
     private int id;
-    @Column(name = "firstname")
+    @Column
     private String firstName;
-    @Column(name = "secondname")
+    @Column
     private String secondName;
     @Column
     private double salary;
-    @Column(name = "dateofbirth")
+    @Column
     private LocalDate dateOfBirth;
 
     public int getId() {

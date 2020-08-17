@@ -30,16 +30,17 @@ public class EditUserServlet extends HttpServlet {
         Map<String, Object> userMap = getUserMap(user);
 
         response.setContentType("text/html;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().println(PageGenerator.instance().getPage("edit.ftl", userMap));
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        User user = getUser(request);
-
+        User user = new User();
+        user.setId(Integer.parseInt(request.getParameter("id")));
+        user.setFirstName(request.getParameter("firstName"));
+        user.setSecondName(request.getParameter("secondName"));
+        user.setSalary(Double.parseDouble(request.getParameter("salary")));
+        user.setDateOfBirth(LocalDate.parse(request.getParameter("dateOfBirth"), DATE_TIME_FORMATTER));
         userService.update(user);
-
         response.sendRedirect("/users");
     }
 
@@ -51,15 +52,5 @@ public class EditUserServlet extends HttpServlet {
         userMap.put("salary", user.getSalary());
         userMap.put("dateOfBirth", user.getDateOfBirth());
         return userMap;
-    }
-
-    private User getUser(HttpServletRequest request) {
-        User user = new User();
-        user.setId(Integer.parseInt(request.getParameter("id")));
-        user.setFirstName(request.getParameter("firstName"));
-        user.setSecondName(request.getParameter("secondName"));
-        user.setSalary(Double.parseDouble(request.getParameter("salary")));
-        user.setDateOfBirth(LocalDate.parse(request.getParameter("dateOfBirth"), DATE_TIME_FORMATTER));
-        return user;
     }
 }

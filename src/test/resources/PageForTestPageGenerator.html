@@ -12,10 +12,10 @@
     <title>Table users</title>
 </head>
 
-<body class="page_body">
+<body class="page_body container-fluid">
 <table class="table">
     <thead class="thead-dark">
-    <tr>
+    <tr class="row">
         <th scope="col" class="col-lg-1">Id</th>
         <th scope="col" class="col-lg-2">First name</th>
         <th scope="col" class="col-lg-2">Second name</th>
@@ -30,7 +30,7 @@
                 </form>
             </div>
         </th>
-        <th class="search-th col-lg-2">
+        <th class="col-lg-2">
             <nav class="navbar navbar-light bg-light search">
                 <form action="/users/search" method="GET" class="form-inline">
                     <div class="input-group">
@@ -46,13 +46,13 @@
     </tr>
     </thead>
     <tbody>
-            <tr>
-            <td>1</td>
-            <td>Anton</td>
-            <td>Kylaev</td>
-            <td>2000.5</td>
-            <td>1993-08-13</td>
-            <td>
+            <tr class="row">
+            <td class="col-lg-1">1</td>
+            <td class="col-lg-2">Anton</td>
+            <td class="col-lg-2">Kylaev</td>
+            <td class="col-lg-1">2000.5</td>
+            <td class="col-lg-2">1993-08-13</td>
+            <td class="col-lg-2">
                 <div class="page__block">
                     <div>
                         <form action="/users/edit" method="GET">

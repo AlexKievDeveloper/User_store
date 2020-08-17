@@ -12,10 +12,10 @@
     <title>Table users</title>
 </head>
 
-<body class="page_body">
+<body class="page_body container-fluid">
 <table class="table">
     <thead class="thead-dark">
-    <tr>
+    <tr class="row">
         <th scope="col" class="col-lg-1">Id</th>
         <th scope="col" class="col-lg-2">First name</th>
         <th scope="col" class="col-lg-2">Second name</th>
@@ -30,7 +30,7 @@
                 </form>
             </div>
         </th>
-        <th class="search-th col-lg-2">
+        <th class="col-lg-2">
             <nav class="navbar navbar-light bg-light search">
                 <form action="/users/search" method="GET" class="form-inline">
                     <div class="input-group">
@@ -47,13 +47,13 @@
     </thead>
     <tbody>
     <#list (users)! as user>
-        <tr>
-            <td>${user.id}</td>
-            <td>${user.firstName}</td>
-            <td>${user.secondName}</td>
-            <td>${user.salary?string.@salary}</td>
-            <td>${user.dateOfBirth}</td>
-            <td>
+        <tr class="row">
+            <td class="col-lg-1">${user.id}</td>
+            <td class="col-lg-2">${user.firstName}</td>
+            <td class="col-lg-2">${user.secondName}</td>
+            <td class="col-lg-1">${user.salary?string.@salary}</td>
+            <td class="col-lg-2">${user.dateOfBirth}</td>
+            <td class="col-lg-2">
                 <div class="page__block">
                     <div>
                         <form action="/users/edit" method="GET">

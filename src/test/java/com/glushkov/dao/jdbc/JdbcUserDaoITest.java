@@ -30,9 +30,9 @@ class JdbcUserDaoITest {
     @BeforeAll
     static void setUp() throws IOException {
         Properties properties = new Properties();
-
-        BufferedInputStream propertiesBufferedInputStream = new BufferedInputStream(Starter.class.getResourceAsStream("/tests.properties"));
-        properties.load(propertiesBufferedInputStream);
+        try(BufferedInputStream propertiesBufferedInputStream = new BufferedInputStream(Starter.class.getResourceAsStream("/tests.properties"));){
+            properties.load(propertiesBufferedInputStream);
+        }
 
         dataSource.setURL(properties.getProperty("jdbc.host")+properties.getProperty("create-table"));
         dataSource.setUser(properties.getProperty("jdbc.user"));
