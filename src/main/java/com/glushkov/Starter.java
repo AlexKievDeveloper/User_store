@@ -5,8 +5,10 @@ import com.glushkov.service.UserService;
 import com.glushkov.web.handler.DefaultErrorHandler;
 import com.glushkov.web.servlet.*;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.resource.Resource;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import java.sql.Connection;
@@ -65,9 +67,9 @@ public class Starter {
 
         servletContextHandler.setWelcomeFiles(new String[]{"home.html"});
 
-        //Resource resource = Resource.newClassPathResource(RESOURCE_PATH);
-        //        context.setBaseResource(resource);
-        //        context.addServlet(DefaultServlet.class, "/");
+       Resource resource = Resource.newClassPathResource(properties.getProperty("RESOURCE_PATH"));
+       servletContextHandler.setBaseResource(resource);
+       servletContextHandler.addServlet(DefaultServlet.class, "/");
 
         Server server = new Server(Integer.parseInt(properties.getProperty("port")));
         server.setHandler(servletContextHandler);
