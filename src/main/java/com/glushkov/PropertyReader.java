@@ -31,8 +31,8 @@ public class PropertyReader {
     private Properties readProdProperties() {
         Properties prodProperties = new Properties();
         prodProperties.setProperty("db-prod.url", System.getenv("db.url"));
-        prodProperties.setProperty("db-prod.url", System.getenv("db.user"));
-        prodProperties.setProperty("db-prod.url", System.getenv("db.password"));
+        prodProperties.setProperty("db-prod.user", System.getenv("db.user"));
+        prodProperties.setProperty("db-prod.password", System.getenv("db.password"));
         prodProperties.setProperty("port-prod", System.getenv("PORT"));
         return prodProperties;
     }
