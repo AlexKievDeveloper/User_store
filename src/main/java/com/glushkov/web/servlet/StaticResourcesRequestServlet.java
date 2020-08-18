@@ -23,6 +23,9 @@ public class StaticResourcesRequestServlet extends HttpServlet {
     }
 
     InputStream readContent(String uri) {
+        if (uri.equals("/")){
+            uri = "/home.html";
+        }
         return getClass().getClassLoader().getResourceAsStream("static" + uri);
     }
 }
