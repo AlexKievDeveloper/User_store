@@ -38,17 +38,6 @@ public class PropertyReader {
     }
 
     private Properties merge(Properties applicationProperties, Properties prodProperties) {
-/*        System.out.println("ApplicationProperties: " + applicationProperties);
-        System.out.println("ProdProperties: " + prodProperties);
-
-        System.out.println("db-prod.url: " + prodProperties.getProperty("db-prod.url"));
-        System.out.println("db-prod.user: " + prodProperties.getProperty("db-prod.user"));
-        System.out.println("db-prod.password: " + prodProperties.getProperty("db-prod.password"));
-
-        System.out.println("db.url: " + applicationProperties.getProperty("db.url"));
-        System.out.println("db.user: " + applicationProperties.getProperty("db.user"));
-        System.out.println("db.password: " + applicationProperties.getProperty("db.password"));*/
-
         applicationProperties.setProperty("db.url", prodProperties.getProperty("db-prod.url"));
         applicationProperties.setProperty("db.user", prodProperties.getProperty("db-prod.user"));
         applicationProperties.setProperty("db.password", prodProperties.getProperty("db-prod.password"));
