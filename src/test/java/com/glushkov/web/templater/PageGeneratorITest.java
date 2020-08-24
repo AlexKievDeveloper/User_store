@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class PageGeneratorITest {
 
     @Test
-    @DisplayName("Generates a page from ftl template and page variable values")
+    @DisplayName("Generates a page from html template and page variable values")
     void getPageTest() throws IOException {
         //prepare
         String expectedPage;
