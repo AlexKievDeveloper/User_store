@@ -25,7 +25,7 @@ public class Starter {
         dataSource.setUser(properties.getProperty("db.user"));
         dataSource.setPassword(properties.getProperty("db.password"));
 
-        try (Connection connection = dataSource.getConnection();//TODO убрать создание ТАБЛИЦЫ и maven-dependency-plugin в pom.xml
+        try (Connection connection = dataSource.getConnection();//TODO убрать создание ТАБЛИЦЫ и  maven-dependency-plugin в pom.xml
              Statement statement = connection.createStatement()){
             statement.execute(properties.getProperty("CREATE_TABLE"));
         }
