@@ -22,7 +22,7 @@ public class StaticResourcesRequestServlet extends HttpServlet {
         }
     }
 
-    InputStream readContent(String uri) {
+    InputStream readContent(String uri) {//TODO замапить сервлет на адрес / отправлять /home.html
         if (uri.equals("/")){
             uri = "/home.html";
         }

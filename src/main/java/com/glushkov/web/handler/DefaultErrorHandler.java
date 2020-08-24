@@ -33,6 +33,6 @@ public class DefaultErrorHandler extends ErrorPageErrorHandler {
 
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        response.getWriter().println(PageGenerator.instance().getPage("error.ftl", parameterMap));
+        response.getWriter().println(PageGenerator.instance().getPage("/error.html", parameterMap));
     }
 }

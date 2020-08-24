@@ -17,7 +17,7 @@ public class PropertyReader {
         return applicationProperties;
     }
 
-    private Properties readApplicationProperties() {
+    Properties readApplicationProperties() {
         Properties properties = new Properties();
 
         try (BufferedInputStream propertiesBufferedInputStream = new BufferedInputStream(Starter.class.getResourceAsStream("/application.properties"))) {
@@ -28,7 +28,7 @@ public class PropertyReader {
         }
     }
 
-    private Properties readProdProperties() {
+    Properties readProdProperties() {
         Properties prodProperties = new Properties();
         prodProperties.setProperty("db-prod.url", System.getenv("db.url"));
         prodProperties.setProperty("db-prod.user", System.getenv("db.user"));
@@ -37,7 +37,7 @@ public class PropertyReader {
         return prodProperties;
     }
 
-    private Properties merge(Properties applicationProperties, Properties prodProperties) {
+    Properties merge(Properties applicationProperties, Properties prodProperties) {
         applicationProperties.setProperty("db.url", prodProperties.getProperty("db-prod.url"));
         applicationProperties.setProperty("db.user", prodProperties.getProperty("db-prod.user"));
         applicationProperties.setProperty("db.password", prodProperties.getProperty("db-prod.password"));

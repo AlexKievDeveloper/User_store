@@ -3,8 +3,7 @@ package com.glushkov.dao.jdbc;
 import com.glushkov.Starter;
 import com.glushkov.entity.User;
 import org.h2.jdbcx.JdbcDataSource;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,35 +17,29 @@ import java.util.List;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+//TODO убрать 2 разных URL и удаление таблицы после каждого метода
 class JdbcUserDaoITest {
 
-    private static final String DROP_TABLE = "DROP TABLE users";
+    private JdbcUserDao jdbcUserDao;
 
-    private static JdbcDataSource dataSource = new JdbcDataSource();
+    private JdbcDataSource dataSource;
 
-    private static JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
+    JdbcUserDaoITest() throws IOException, SQLException {
+        Properties properties;
+        properties = new Properties();
+        dataSource = new JdbcDataSource();
 
-    @BeforeAll
-    static void setUp() throws IOException {
-        Properties properties = new Properties();
-        try(BufferedInputStream propertiesBufferedInputStream = new BufferedInputStream(Starter.class.getResourceAsStream("/tests.properties"));){
+        try (BufferedInputStream propertiesBufferedInputStream = new BufferedInputStream(Starter.class.getResourceAsStream("/application.tests.properties"))) {
             properties.load(propertiesBufferedInputStream);
         }
 
-        dataSource.setURL(properties.getProperty("jdbc.host")+properties.getProperty("create-table"));
+        dataSource.setURL(properties.getProperty("jdbc.host"));
         dataSource.setUser(properties.getProperty("jdbc.user"));
         dataSource.setPassword(properties.getProperty("jdbc.password"));
+        dataSource.getConnection();
 
-        for (int i = 0; i < 5; i++) {
-            User user = new User();
-            user.setFirstName("Kirill");
-            user.setSecondName("Mavrody");
-            user.setSalary(2000.0);
-            LocalDate dateOfBirth = LocalDate.of(1993, 6, 23);
-            user.setDateOfBirth(dateOfBirth);
-            jdbcUserDao.save(user);
-        }
+        dataSource.setURL(properties.getProperty("jdbc.url"));
+        jdbcUserDao = new JdbcUserDao(dataSource);
     }
 
     @Test
@@ -143,19 +136,25 @@ class JdbcUserDaoITest {
     void deleteTest() {
         //prepare
         assertEquals(5, jdbcUserDao.findAll().size());
+
         //when
         jdbcUserDao.delete(5);
         List<User> listOfUsersAfter = jdbcUserDao.findAll();
+
         //then
         assertEquals(4, listOfUsersAfter.size());
     }
 
-    @AfterAll
-    static void cleanUp() throws SQLException {
+    @AfterEach
+    void cleanUp() throws SQLException {
+        String DROP_TABLE = "DROP TABLE users";
+
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute(DROP_TABLE);
         }
     }
 }
+
+
 

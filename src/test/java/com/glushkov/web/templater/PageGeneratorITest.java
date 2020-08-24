@@ -1,12 +1,12 @@
 package com.glushkov.web.templater;
 
+import com.glushkov.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,24 +21,26 @@ class PageGeneratorITest {
     @DisplayName("Generates a page from ftl template and page variable values")
     void getPageTest() throws IOException {
         //prepare
-        Path path = Paths.get("src/test/resources/PageForTestPageGenerator.html");
-        byte[] bytes = Files.readAllBytes(path);
-        String expectedPage = new String(bytes);
+        String expectedPage;
+        try (InputStream inputStreamFromFile = new BufferedInputStream(getClass().getResourceAsStream("/PageForTestPageGenerator.html"))) {
+            expectedPage = new String(inputStreamFromFile.readAllBytes());
+        }
 
-        Map<String, Object> user = new HashMap<>();
-        user.put("id", 1);
-        user.put("firstName", "Anton");
-        user.put("secondName", "Kylaev");
-        user.put("salary", 2000.5);
-        user.put("dateOfBirth", LocalDate.of(1993, 8, 13));
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("Anton");
+        user.setSecondName("Kylaev");
+        user.setSalary(2000.5);
+        user.setDateOfBirth(LocalDate.of(1993, 8, 13));
 
-        List<Map<String, Object>> users = new ArrayList<>();
+        List<User> users = new ArrayList<>();
         users.add(user);
         Map<String, Object> pageVariables = new HashMap<>();
         pageVariables.put("users", users);
 
         //when
-        String actualPage = PageGenerator.instance().getPage("page.ftl", pageVariables);
+        String actualPage = PageGenerator.instance().getPage("/page.html", pageVariables);
+
         //then
         assertEquals(expectedPage, actualPage);
     }

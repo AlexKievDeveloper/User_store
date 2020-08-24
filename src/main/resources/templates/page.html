@@ -46,19 +46,18 @@
     </tr>
     </thead>
     <tbody>
-    <#list (users)! as user>
         <tr class="row">
-            <td class="col-lg-1">${user.id}</td>
-            <td class="col-lg-2">${user.firstName}</td>
-            <td class="col-lg-2">${user.secondName}</td>
-            <td class="col-lg-1">${user.salary?string.@salary}</td>
-            <td class="col-lg-2">${user.dateOfBirth}</td>
+            <td class="col-lg-1">UserId</td>
+            <td class="col-lg-2">FirstName</td>
+            <td class="col-lg-2">SecondName</td>
+            <td class="col-lg-1">Salary</td>
+            <td class="col-lg-2">DateOfBirth</td>
             <td class="col-lg-2">
                 <div class="page__block">
                     <div>
                         <form action="/users/edit" method="GET">
                             <button>
-                                <input type="hidden" name="id" value=${user.id}>
+                                <input type="hidden" name="id" value="UserId">
                                 <img src="/img/edit.jpg" alt="Edit" style="vertical-align:middle">
                             </button>
                         </form>
@@ -66,7 +65,7 @@
                     <div>
                         <form action="/users/remove" method="POST">
                             <button>
-                                <input type="hidden" name="id" value=${user.id}>
+                                <input type="hidden" name="id" value="UserId">
                                 <img src="/img/remove.jpg" alt="Remove" style="vertical-align:middle">
                             </button>
                         </form>
@@ -74,10 +73,8 @@
                 </div>
             </td>
         </tr>
-    </#list>
     </tbody>
 </table>
-<h3>${(message)!}</h3>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

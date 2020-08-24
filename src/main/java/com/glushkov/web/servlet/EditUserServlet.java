@@ -30,7 +30,7 @@ public class EditUserServlet extends HttpServlet {
         Map<String, Object> userMap = getUserMap(user);
 
         response.setContentType("text/html;charset=utf-8");
-        response.getWriter().println(PageGenerator.instance().getPage("edit.ftl", userMap));
+        response.getWriter().println(PageGenerator.instance().getPage("/edit.html", userMap));
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

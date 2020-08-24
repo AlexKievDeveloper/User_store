@@ -1,23 +1,16 @@
 package com.glushkov.entity;
 
-import com.glushkov.dao.jdbc.generator.Column;
-import com.glushkov.dao.jdbc.generator.Id;
-import com.glushkov.dao.jdbc.generator.Table;
-
 import java.time.LocalDate;
 
-@Table(name = "users")
 public class User {
-    @Id
-    @Column
     private int id;
-    @Column
+
     private String firstName;
-    @Column
+
     private String secondName;
-    @Column
+
     private double salary;
-    @Column
+
     private LocalDate dateOfBirth;
 
     public int getId() {

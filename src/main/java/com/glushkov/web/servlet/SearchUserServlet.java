@@ -35,6 +35,6 @@ public class SearchUserServlet extends HttpServlet {
         }
 
         response.setContentType("text/html;charset=utf-8");
-        response.getWriter().println(PageGenerator.instance().getPage("page.ftl", usersMap));
+        response.getWriter().println(PageGenerator.instance().getPage("/page.html", usersMap));
     }
 }

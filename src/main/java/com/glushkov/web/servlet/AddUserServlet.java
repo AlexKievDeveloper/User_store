@@ -26,7 +26,7 @@ public class AddUserServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, Object> userMap = new HashMap<>();
         response.setContentType("text/html;charset=utf-8");
-        response.getWriter().println(PageGenerator.instance().getPage("form.ftl", userMap));
+        response.getWriter().println(PageGenerator.instance().getPage("/form.html", userMap));
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

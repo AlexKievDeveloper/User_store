@@ -16,6 +16,7 @@ import java.util.Properties;
 public class Starter {
 
     public static void main(String[] args) throws Exception {
+
         PropertyReader propertyReader = new PropertyReader();
         Properties properties = propertyReader.getProperties();
 
@@ -24,7 +25,7 @@ public class Starter {
         dataSource.setUser(properties.getProperty("db.user"));
         dataSource.setPassword(properties.getProperty("db.password"));
 
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();//TODO убрать создание ТАБЛИЦЫ и dependency-plugin в pom.xml
              Statement statement = connection.createStatement()){
             statement.execute(properties.getProperty("CREATE_TABLE"));
         }

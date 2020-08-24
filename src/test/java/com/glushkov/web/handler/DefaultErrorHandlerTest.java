@@ -1,19 +1,15 @@
 package com.glushkov.web.handler;
 
-import org.eclipse.jetty.server.HttpChannel;
-import org.eclipse.jetty.server.HttpOutput;
 import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.*;
 
+import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class DefaultErrorHandlerTest {
 
@@ -24,11 +20,12 @@ class DefaultErrorHandlerTest {
         DefaultErrorHandler defaultErrorHandler = new DefaultErrorHandler();
 
         Request mockBaseRequest = mock(Request.class);
-        HttpServletRequest mockRequest = mock(Request.class);
 
-        HttpChannel httpChannel = mock(HttpChannel.class);
-        HttpOutput httpOutput = mock(HttpOutput.class);
-        HttpServletResponse response = new Response(httpChannel, httpOutput);
+        HttpServletRequest mockRequest = mock(HttpServletRequest.class);
+        HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+
+        StringWriter stringWriter = new StringWriter();
+        when(mockResponse.getWriter()).thenReturn(new PrintWriter(stringWriter));
 
         when(mockRequest.getAttribute("javax.servlet.error.servlet_name")).thenReturn("com.glushkov.servlet.AddUserServlet");
         when(mockRequest.getAttribute("javax.servlet.error.exception")).thenReturn(new IllegalArgumentException(new NumberFormatException()));
@@ -37,11 +34,19 @@ class DefaultErrorHandlerTest {
         String message = "IllegalArgumentException";
         String mimeType = "text/html";
 
+        String expectedPage;
+        try (InputStream inputStreamFromFile = new BufferedInputStream(getClass().getResourceAsStream("/PageForTestDefaultErrorHandler.html"))) {
+            expectedPage = new String(inputStreamFromFile.readAllBytes());
+        }
+
         //when
-        defaultErrorHandler.generateAcceptableResponse(mockBaseRequest, mockRequest, response, code, message, mimeType);
+        defaultErrorHandler.generateAcceptableResponse(mockBaseRequest, mockRequest, mockResponse, code, message, mimeType);
 
         //then
-        assertEquals(500, response.getStatus());
-        assertEquals("text/html;charset=utf-8", response.getContentType());
+        verify(mockBaseRequest).setHandled(true);
+        verify(mockResponse).setContentType("text/html;charset=utf-8");
+        verify(mockResponse).setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        verify(mockResponse).getWriter();
+        assertEquals(expectedPage, stringWriter.toString());
     }
 }

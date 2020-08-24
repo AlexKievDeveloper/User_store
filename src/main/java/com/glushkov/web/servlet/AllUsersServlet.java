@@ -28,6 +28,6 @@ public class AllUsersServlet extends HttpServlet {
         usersMap.put("users", usersList);
 
         response.setContentType("text/html;charset=utf-8");
-        response.getWriter().println(PageGenerator.instance().getPage("page.ftl", usersMap));
+        response.getWriter().println(PageGenerator.instance().getPage("/page.html", usersMap));
     }
 }
