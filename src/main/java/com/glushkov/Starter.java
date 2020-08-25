@@ -9,8 +9,6 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.postgresql.ds.PGSimpleDataSource;
 
-import java.sql.Connection;
-import java.sql.Statement;
 import java.util.Properties;
 
 public class Starter {
@@ -24,11 +22,6 @@ public class Starter {
         dataSource.setURL(properties.getProperty("db.url"));
         dataSource.setUser(properties.getProperty("db.user"));
         dataSource.setPassword(properties.getProperty("db.password"));
-
-        try (Connection connection = dataSource.getConnection();//TODO убрать создание ТАБЛИЦЫ
-             Statement statement = connection.createStatement()){
-            statement.execute(properties.getProperty("CREATE_TABLE"));
-        }
 
         JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
 
